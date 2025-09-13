@@ -100,6 +100,22 @@ st.markdown("""
       border-radius: 8px;
       margin: 0.5rem 0;
   }
+  
+  .case-study {
+      background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin: 1rem 0;
+      border-left: 4px solid #2196f3;
+  }
+  
+  .trend-card {
+      background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin: 1rem 0;
+      border-left: 4px solid #ff9800;
+  }
 </style>
 """, unsafe_allow_html=True)
 
@@ -131,6 +147,10 @@ if 'quiz_total' not in st.session_state:
   st.session_state.quiz_total = 0
 if 'current_comparison' not in st.session_state:
   st.session_state.current_comparison = None
+if 'pregunta_actual' not in st.session_state:
+  st.session_state.pregunta_actual = 0
+if 'quiz_completado' not in st.session_state:
+  st.session_state.quiz_completado = False
 
 # Header principal
 st.markdown("""
@@ -435,19 +455,43 @@ elif seccion == "💡 Ejemplos Prácticos":
       st.markdown("---")
       st.markdown(f"### 📋 Información Detallada: {comp['software']}")
       
-      # Información simulada (en una app real, esto vendría de una base de datos)
+      # Información detallada de software específico
       info_software = {
           'Firefox': {
-              'descripcion': 'Navegador web libre desarrollado por Mozilla',
-              'licencia': 'Mozilla Public License',
-              'ventajas': ['Privacidad', 'Personalización', 'Extensiones'],
-              'desventajas': ['Menor cuota de mercado', 'Algunos sitios optimizados para Chrome']
+              'descripcion': 'Navegador web libre desarrollado por Mozilla Foundation',
+              'licencia': 'Mozilla Public License 2.0',
+              'ventajas': ['Privacidad por defecto', 'Extensiones potentes', 'Código abierto', 'Multiplataforma'],
+              'desventajas': ['Menor cuota de mercado', 'Algunos sitios optimizados para Chrome', 'Consumo de memoria']
+          },
+          'Linux Ubuntu': {
+              'descripcion': 'Distribución de Linux basada en Debian, enfocada en facilidad de uso',
+              'licencia': 'GPL y otras licencias libres',
+              'ventajas': ['Gratuito', 'Seguro', 'Personalizable', 'Gran comunidad'],
+              'desventajas': ['Curva de aprendizaje', 'Compatibilidad de software comercial', 'Soporte de hardware específico']
+          },
+          'LibreOffice': {
+              'descripcion': 'Suite ofimática libre y gratuita, fork de OpenOffice',
+              'licencia': 'Mozilla Public License 2.0',
+              'ventajas': ['Gratuito', 'Compatible con formatos MS Office', 'Multiplataforma', 'Sin telemetría'],
+              'desventajas': ['Interfaz menos moderna', 'Funciones avanzadas limitadas', 'Rendimiento en documentos grandes']
           },
           'Windows 11': {
-              'descripcion': 'Sistema operativo propietario de Microsoft',
+              'descripcion': 'Sistema operativo propietario más reciente de Microsoft',
+              'licencia': 'Licencia de Software de Microsoft',
+              'ventajas': ['Compatibilidad amplia', 'Soporte oficial', 'Interfaz moderna', 'Gaming optimizado'],
+              'desventajas': ['Costo de licencia', 'Telemetría extensiva', 'Requisitos de hardware', 'Actualizaciones forzadas']
+          },
+          'Microsoft Office': {
+              'descripcion': 'Suite ofimática propietaria líder en el mercado empresarial',
               'licencia': 'Licencia comercial de Microsoft',
-              'ventajas': ['Compatibilidad amplia', 'Soporte oficial', 'Interfaz familiar'],
-              'desventajas': ['Costo de licencia', 'Limitaciones de personalización', 'Telemetría']
+              'ventajas': ['Estándar de la industria', 'Funciones avanzadas', 'Integración con servicios MS', 'Soporte profesional'],
+              'desventajas': ['Costo elevado', 'Dependencia del proveedor', 'Modelo de suscripción', 'Telemetría']
+          },
+          'Adobe Photoshop': {
+              'descripcion': 'Editor de imágenes profesional líder en la industria',
+              'licencia': 'Licencia comercial de Adobe',
+              'ventajas': ['Herramientas profesionales', 'Estándar de la industria', 'Actualizaciones constantes', 'Integración Creative Cloud'],
+              'desventajas': ['Muy costoso', 'Solo suscripción', 'Curva de aprendizaje', 'Dependencia de Adobe']
           }
       }
       
@@ -455,10 +499,10 @@ elif seccion == "💡 Ejemplos Prácticos":
       default_info = {
           'descripcion': f'{comp["software"]} - Software de {comp["categoria"]}',
           'licencia': 'GPL/MIT/Apache' if comp['tipo'] == 'libre' else 'Licencia Propietaria',
-          'ventajas': ['Código abierto', 'Gratuito', 'Personalizable'] if comp['tipo'] == 'libre' 
-                     else ['Soporte oficial', 'Interfaz pulida', 'Documentación'],
-          'desventajas': ['Curva de aprendizaje'] if comp['tipo'] == 'libre' 
-                        else ['Costo', 'Dependencia del proveedor']
+          'ventajas': ['Código abierto', 'Gratuito', 'Personalizable', 'Comunidad activa'] if comp['tipo'] == 'libre' 
+                     else ['Soporte oficial', 'Interfaz pulida', 'Documentación completa', 'Funciones avanzadas'],
+          'desventajas': ['Curva de aprendizaje', 'Soporte limitado'] if comp['tipo'] == 'libre' 
+                        else ['Costo elevado', 'Dependencia del proveedor', 'Licencias restrictivas']
       }
       
       info = info_software.get(comp['software'], default_info)
@@ -495,25 +539,30 @@ elif seccion == "📈 Análisis de Costos":
       años = st.slider("Período (años)", 1, 10, 5)
       incluir_soporte = st.checkbox("Incluir soporte técnico")
       incluir_capacitacion = st.checkbox("Incluir capacitación")
+      incluir_migracion = st.checkbox("Incluir costos de migración")
   
   with col2:
-      # Costos estimados (valores simulados)
+      # Costos estimados (valores realistas del mercado)
       costo_licencia_office = 150  # USD por usuario por año
       costo_licencia_windows = 200  # USD por usuario (una vez)
       costo_soporte = 50  # USD por usuario por año
       costo_capacitacion = 100  # USD por usuario (una vez)
+      costo_migracion = 75  # USD por usuario (una vez)
       
-      # Cálculos
+      # Cálculos para software privado
       costo_privado = (
           (costo_licencia_office * años * num_usuarios) +
           (costo_licencia_windows * num_usuarios) +
           (costo_soporte * años * num_usuarios if incluir_soporte else 0) +
-          (costo_capacitacion * num_usuarios if incluir_capacitacion else 0)
+          (costo_capacitacion * num_usuarios if incluir_capacitacion else 0) +
+          (costo_migracion * num_usuarios if incluir_migracion else 0)
       )
       
+      # Cálculos para software libre (costos reducidos pero no cero)
       costo_libre = (
-          (costo_soporte * 0.3 * años * num_usuarios if incluir_soporte else 0) +  # 30% del costo de soporte comercial
-          (costo_capacitacion * 0.5 * num_usuarios if incluir_capacitacion else 0)  # 50% del costo de capacitación
+          (costo_soporte * 0.4 * años * num_usuarios if incluir_soporte else 0) +  # 40% del costo de soporte comercial
+          (costo_capacitacion * 0.6 * num_usuarios if incluir_capacitacion else 0) +  # 60% del costo de capacitación
+          (costo_migracion * 1.2 * num_usuarios if incluir_migracion else 0)  # 120% por complejidad de migración
       )
       
       ahorro = costo_privado - costo_libre
@@ -521,7 +570,8 @@ elif seccion == "📈 Análisis de Costos":
       st.markdown("#### Resultados")
       st.metric("Costo Software Privado", f"${costo_privado:,.2f}")
       st.metric("Costo Software Libre", f"${costo_libre:,.2f}")
-      st.metric("Ahorro Total", f"${ahorro:,.2f}", delta=f"{(ahorro/costo_privado)*100:.1f}%")
+      st.metric("Ahorro Total", f"${ahorro:,.2f}", 
+               delta=f"{(ahorro/costo_privado)*100:.1f}%" if costo_privado > 0 else "0%")
   
   # Gráfico de costos por año
   años_lista = list(range(1, años + 1))
@@ -533,12 +583,14 @@ elif seccion == "📈 Análisis de Costos":
           (costo_licencia_office * año * num_usuarios) +
           (costo_licencia_windows * num_usuarios) +
           (costo_soporte * año * num_usuarios if incluir_soporte else 0) +
-          (costo_capacitacion * num_usuarios if incluir_capacitacion else 0)
+          (costo_capacitacion * num_usuarios if incluir_capacitacion else 0) +
+          (costo_migracion * num_usuarios if incluir_migracion else 0)
       )
       
       costo_l = (
-          (costo_soporte * 0.3 * año * num_usuarios if incluir_soporte else 0) +
-          (costo_capacitacion * 0.5 * num_usuarios if incluir_capacitacion else 0)
+          (costo_soporte * 0.4 * año * num_usuarios if incluir_soporte else 0) +
+          (costo_capacitacion * 0.6 * num_usuarios if incluir_capacitacion else 0) +
+          (costo_migracion * 1.2 * num_usuarios if incluir_migracion else 0)
       )
       
       costos_privado_acum.append(costo_p)
@@ -555,7 +607,11 @@ elif seccion == "📈 Análisis de Costos":
       x='Año', 
       y=['Software Privado', 'Software Libre'],
       title='Evolución de Costos Acumulados',
-      labels={'value': 'Costo (USD)', 'variable': 'Tipo de Software'}
+      labels={'value': 'Costo (USD)', 'variable': 'Tipo de Software'},
+      color_discrete_map={
+          'Software Privado': '#dc3545',
+          'Software Libre': '#28a745'
+      }
   )
   
   st.plotly_chart(fig_costos, use_container_width=True)
@@ -564,126 +620,15 @@ elif seccion == "📈 Análisis de Costos":
   st.markdown("### 📊 Desglose de Costos")
   
   if costo_privado > 0:
-      labels_privado = ['Licencias Office', 'Licencias Windows', 'Soporte', 'Capacitación']
-      values_privado = [
-          costo_licencia_office * años * num_usuarios,
-          costo_licencia_windows * num_usuarios,
-          costo_soporte * años * num_usuarios if incluir_soporte else 0,
-          costo_capacitacion * num_usuarios if incluir_capacitacion else 0
-      ]
+      labels_privado = []
+      values_privado = []
       
-      fig_pie = px.pie(
-          values=values_privado,
-          names=labels_privado,
-          title="Distribución de Costos - Software Privado"
-      )
+      office_cost = costo_licencia_office * años * num_usuarios
+      windows_cost = costo_licencia_windows * num_usuarios
+      support_cost = costo_soporte * años * num_usuarios if incluir_soporte else 0
+      training_cost = costo_capacitacion * num_usuarios if incluir_capacitacion else 0
+      migration_cost = costo_migracion * num_usuarios if incluir_migracion else 0
       
-      st.plotly_chart(fig_pie, use_container_width=True)
-
-# Sección: Quiz Interactivo
-elif seccion == "🎮 Quiz Interactivo":
-  st.markdown("## 🎮 Quiz Interactivo")
-  
-  # Preguntas del quiz
-  preguntas = [
-      {
-          "pregunta": "¿Cuál es la principal característica del software libre?",
-          "opciones": [
-              "Es gratuito",
-              "El código fuente está disponible",
-              "No tiene bugs",
-              "Es más rápido"
-          ],
-          "correcta": 1,
-          "explicacion": "La principal característica es que el código fuente está disponible y puede ser modificado."
-      },
-      {
-          "pregunta": "¿Quién fundó el proyecto GNU?",
-          "opciones": [
-              "Linus Torvalds",
-              "Richard Stallman",
-              "Bill Gates",
-              "Steve Jobs"
-          ],
-          "correcta": 1,
-          "explicacion": "Richard Stallman fundó el proyecto GNU en 1983."
-      },
-      {
-          "pregunta": "¿Cuál de estos NO es software libre?",
-          "opciones": [
-              "Linux",
-              "Firefox",
-              "Microsoft Office",
-              "LibreOffice"
-          ],
-          "correcta": 2,
-          "explicacion": "Microsoft Office es software propietario, no libre."
-      },
-      {
-          "pregunta": "¿Qué significa GPL?",
-          "opciones": [
-              "General Public License",
-              "Global Programming Language",
-              "GNU Private License",
-              "General Programming Library"
-          ],
-          "correcta": 0,
-          "explicacion": "GPL significa General Public License, una licencia de software libre."
-      }
-  ]
-  
-  # Mostrar pregunta actual
-  if 'pregunta_actual' not in st.session_state:
-      st.session_state.pregunta_actual = 0
-  
-  if st.session_state.pregunta_actual < len(preguntas):
-      pregunta = preguntas[st.session_state.pregunta_actual]
-      
-      st.markdown(f"### Pregunta {st.session_state.pregunta_actual + 1} de {len(preguntas)}")
-      st.markdown(f"**{pregunta['pregunta']}**")
-      
-      respuesta = st.radio(
-          "Selecciona tu respuesta:",
-          pregunta['opciones'],
-          key=f"pregunta_{st.session_state.pregunta_actual}"
-      )
-      
-      if st.button("Responder"):
-          st.session_state.quiz_total += 1
-          respuesta_idx = pregunta['opciones'].index(respuesta)
-          
-          if respuesta_idx == pregunta['correcta']:
-              st.session_state.quiz_score += 1
-              st.markdown(f"""
-              <div class="quiz-correct">
-                  ✅ ¡Correcto! {pregunta['explicacion']}
-              </div>
-              """, unsafe_allow_html=True)
-          else:
-              st.markdown(f"""
-              <div class="quiz-incorrect">
-                  ❌ Incorrecto. {pregunta['explicacion']}
-              </div>
-              """, unsafe_allow_html=True)
-          
-          st.session_state.pregunta_actual += 1
-          
-          if st.button("Siguiente Pregunta"):
-              st.rerun()
-  
-  else:
-      # Mostrar resultados finales
-      st.markdown("## 🎉 ¡Quiz Completado!")
-      
-      score_percentage = (st.session_state.quiz_score / st.session_state.quiz_total) * 100
-      
-      col1, col2, col3 = st.columns(3)
-      
-      with col1:
-          st.metric("Respuestas Correctas", st.session_state.quiz_score)
-      with col2:
-          st.metric("Total de Preguntas", st.session_state.quiz_total)
-      with col3:
-          st.metric("Porcentaje", f"{score_percentage:.1f}%")
-      
-      if score_percentage
+      if office_cost > 0:
+          labels_privado.append('Licencias Office')
+          values_privado.appen
