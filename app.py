@@ -118,6 +118,14 @@ st.markdown("""
       margin: 1rem 0;
       border-left: 4px solid #f39c12;
   }
+  
+  .trend-card {
+      background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin: 1rem 0;
+      border-left: 4px solid #ff9800;
+  }
 </style>
 """, unsafe_allow_html=True)
 
@@ -359,35 +367,6 @@ elif seccion == "📊 Comparación Detallada":
   
   df_detailed = pd.DataFrame(detailed_comparison)
   st.dataframe(df_detailed, use_container_width=True)
-  
-  # Selector interactivo para comparar aspectos específicos
-  st.markdown("### 🎯 Comparador Interactivo")
-  
-  aspecto_seleccionado = st.selectbox(
-      "Selecciona un aspecto para análisis detallado:",
-      aspectos
-  )
-  
-  if aspecto_seleccionado:
-      idx = aspectos.index(aspecto_seleccionado)
-      libre_score = libre_scores[idx]
-      privado_score = privado_scores[idx]
-      
-      col1, col2, col3 = st.columns(3)
-      
-      with col1:
-          st.metric("Software Libre", f"{libre_score}/10", 
-                   delta=f"{libre_score - privado_score}")
-      
-      with col2:
-          st.metric("Software Privado", f"{privado_score}/10",
-                   delta=f"{privado_score - libre_score}")
-      
-      with col3:
-          winner = "Software Libre" if libre_score > privado_score else "Software Privado"
-          if libre_score == privado_score:
-              winner = "Empate"
-          st.metric("Ganador", winner)
 
 # Sección: Ejemplos Prácticos
 elif seccion == "💡 Ejemplos Prácticos":
@@ -460,24 +439,10 @@ elif seccion == "💡 Ejemplos Prácticos":
               'ventajas': ['Gratuito', 'Compatible con formatos MS Office', 'Multiplataforma', 'Sin telemetría'],
               'desventajas': ['Interfaz menos moderna', 'Funciones avanzadas limitadas', 'Rendimiento en documentos grandes'],
               'alternativas': ['Apache OpenOffice', 'OnlyOffice']
-          },
-          'Windows 11': {
-              'descripcion': 'Sistema operativo propietario más reciente de Microsoft',
-              'licencia': 'Licencia de Software de Microsoft',
-              'ventajas': ['Compatibilidad amplia', 'Soporte oficial', 'Interfaz moderna', 'Gaming optimizado'],
-              'desventajas': ['Costo de licencia', 'Telemetría extensiva', 'Requisitos de hardware', 'Actualizaciones forzadas'],
-              'alternativas': ['macOS', 'Chrome OS']
-          },
-          'Microsoft Office': {
-              'descripcion': 'Suite ofimática propietaria líder en el mercado empresarial',
-              'licencia': 'Licencia comercial de Microsoft',
-              'ventajas': ['Estándar de la industria', 'Funciones avanzadas', 'Integración con servicios MS', 'Soporte profesional'],
-              'desventajas': ['Costo elevado', 'Dependencia del proveedor', 'Modelo de suscripción', 'Telemetría'],
-              'alternativas': ['Google Workspace', 'Apple iWork']
           }
       }
       
-      # Información por defecto si no está en el diccionario
+      # Información por defecto
       default_info = {
           'descripcion': f'{comp["software"]} - Software de {comp["categoria"]}',
           'licencia': 'GPL/MIT/Apache' if comp['tipo'] == 'libre' else 'Licencia Propietaria',
@@ -506,10 +471,6 @@ elif seccion == "💡 Ejemplos Prácticos":
           st.markdown("#### ❌ Desventajas")
           for desventaja in info['desventajas']:
               st.write(f"• {desventaja}")
-      
-      if 'alternativas' in info:
-          st.markdown("#### 🔄 Alternativas")
-          st.write(", ".join(info['alternativas']))
 
 # Sección: Análisis de Costos
 elif seccion == "📈 Análisis de Costos":
@@ -529,7 +490,7 @@ elif seccion == "📈 Análisis de Costos":
       incluir_migracion = st.checkbox("Incluir costos de migración")
   
   with col2:
-      # Costos estimados (valores realistas del mercado)
+      # Costos estimados
       costo_licencia_office = 150  # USD por usuario por año
       costo_licencia_windows = 200  # USD por usuario (una vez)
       costo_soporte = 50  # USD por usuario por año
@@ -545,11 +506,11 @@ elif seccion == "📈 Análisis de Costos":
           (costo_migracion * num_usuarios if incluir_migracion else 0)
       )
       
-      # Cálculos para software libre (costos reducidos pero no cero)
+      # Cálculos para software libre
       costo_libre = (
-          (costo_soporte * 0.4 * años * num_usuarios if incluir_soporte else 0) +  # 40% del costo de soporte comercial
-          (costo_capacitacion * 0.6 * num_usuarios if incluir_capacitacion else 0) +  # 60% del costo de capacitación
-          (costo_migracion * 1.2 * num_usuarios if incluir_migracion else 0)  # 120% por complejidad de migración
+          (costo_soporte * 0.4 * años * num_usuarios if incluir_soporte else 0) +
+          (costo_capacitacion * 0.6 * num_usuarios if incluir_capacitacion else 0) +
+          (costo_migracion * 1.2 * num_usuarios if incluir_migracion else 0)
       )
       
       ahorro = costo_privado - costo_libre
@@ -559,42 +520,6 @@ elif seccion == "📈 Análisis de Costos":
       st.metric("Costo Software Libre", f"${costo_libre:,.2f}")
       st.metric("Ahorro Total", f"${ahorro:,.2f}", 
                delta=f"{(ahorro/costo_privado)*100:.1f}%" if costo_privado > 0 else "0%")
-  
-  # Resumen de costos
-  st.markdown(f"""
-  <div class="cost-summary">
-      <h4>💡 Resumen de Análisis</h4>
-      <p><strong>Configuración:</strong> {num_usuarios} usuarios por {años} años</p>
-      <p><strong>Ahorro estimado:</strong> ${ahorro:,.2f} ({(ahorro/costo_privado)*100:.1f}% menos)</p>
-      <p><strong>Ahorro por usuario/año:</strong> ${ahorro/(num_usuarios*años):,.2f}</p>
-  </div>
-  """, unsafe_allow_html=True)
-  
-  # Tabla de costos detallada
-  st.markdown("### 📊 Desglose Detallado de Costos")
-  
-  cost_breakdown = {
-      'Concepto': ['Licencias Office', 'Licencias SO', 'Soporte Técnico', 'Capacitación', 'Migración', 'TOTAL'],
-      'Software Privado': [
-          f"${costo_licencia_office * años * num_usuarios:,.2f}",
-          f"${costo_licencia_windows * num_usuarios:,.2f}",
-          f"${costo_soporte * años * num_usuarios if incluir_soporte else 0:,.2f}",
-          f"${costo_capacitacion * num_usuarios if incluir_capacitacion else 0:,.2f}",
-          f"${costo_migracion * num_usuarios if incluir_migracion else 0:,.2f}",
-          f"${costo_privado:,.2f}"
-      ],
-      'Software Libre': [
-          "$0.00",
-          "$0.00",
-          f"${costo_soporte * 0.4 * años * num_usuarios if incluir_soporte else 0:,.2f}",
-          f"${costo_capacitacion * 0.6 * num_usuarios if incluir_capacitacion else 0:,.2f}",
-          f"${costo_migracion * 1.2 * num_usuarios if incluir_migracion else 0:,.2f}",
-          f"${costo_libre:,.2f}"
-      ]
-  }
-  
-  df_costs = pd.DataFrame(cost_breakdown)
-  st.dataframe(df_costs, use_container_width=True)
 
 # Sección: Quiz Interactivo
 elif seccion == "🎮 Quiz Interactivo":
@@ -607,4 +532,118 @@ elif seccion == "🎮 Quiz Interactivo":
           "opciones": [
               "Es gratuito",
               "El código fuente está disponible",
-              "No
+              "No tiene licencia",
+              "Solo funciona en Linux"
+          ],
+          "respuesta_correcta": 1,
+          "explicacion": "La principal característica del software libre es que el código fuente está disponible para ser estudiado, modificado y distribuido."
+      },
+      {
+          "pregunta": "¿Qué significa GPL?",
+          "opciones": [
+              "General Public License",
+              "GNU Private License",
+              "Global Programming Language",
+              "General Programming Library"
+          ],
+          "respuesta_correcta": 0,
+          "explicacion": "GPL significa General Public License, una licencia de software libre creada por la Free Software Foundation."
+      },
+      {
+          "pregunta": "¿Cuál de estos NO es software libre?",
+          "opciones": [
+              "Firefox",
+              "LibreOffice",
+              "Microsoft Office",
+              "GIMP"
+          ],
+          "respuesta_correcta": 2,
+          "explicacion": "Microsoft Office es software propietario, mientras que los demás son ejemplos de software libre."
+      },
+      {
+          "pregunta": "¿Qué ventaja principal tiene el software libre en términos de seguridad?",
+          "opciones": [
+              "No tiene vulnerabilidades",
+              "El código puede ser auditado por cualquiera",
+              "Solo lo usan hackers",
+              "Es más lento y por eso más seguro"
+          ],
+          "respuesta_correcta": 1,
+          "explicacion": "La transparencia del código permite que cualquier persona pueda auditarlo y encontrar vulnerabilidades."
+      },
+      {
+          "pregunta": "¿Cuál es una desventaja común del software libre?",
+          "opciones": [
+              "Es muy caro",
+              "No se puede modificar",
+              "Puede tener una curva de aprendizaje más pronunciada",
+              "Solo funciona en servidores"
+          ],
+          "respuesta_correcta": 2,
+          "explicacion": "Muchas veces el software libre requiere más conocimientos técnicos para su uso y configuración."
+      }
+  ]
+  
+  if not st.session_state.quiz_completado:
+      if st.session_state.pregunta_actual < len(preguntas):
+          pregunta_actual = preguntas[st.session_state.pregunta_actual]
+          
+          st.markdown(f"### Pregunta {st.session_state.pregunta_actual + 1} de {len(preguntas)}")
+          st.markdown(f"**{pregunta_actual['pregunta']}**")
+          
+          respuesta = st.radio(
+              "Selecciona tu respuesta:",
+              pregunta_actual['opciones'],
+              key=f"pregunta_{st.session_state.pregunta_actual}"
+          )
+          
+          if st.button("Responder", key=f"btn_{st.session_state.pregunta_actual}"):
+              respuesta_idx = pregunta_actual['opciones'].index(respuesta)
+              st.session_state.quiz_total += 1
+              
+              if respuesta_idx == pregunta_actual['respuesta_correcta']:
+                  st.session_state.quiz_score += 1
+                  st.markdown(f"""
+                  <div class="quiz-correct">
+                      <h4>✅ ¡Correcto!</h4>
+                      <p>{pregunta_actual['explicacion']}</p>
+                  </div>
+                  """, unsafe_allow_html=True)
+              else:
+                  respuesta_correcta = pregunta_actual['opciones'][pregunta_actual['respuesta_correcta']]
+                  st.markdown(f"""
+                  <div class="quiz-incorrect">
+                      <h4>❌ Incorrecto</h4>
+                      <p><strong>Respuesta correcta:</strong> {respuesta_correcta}</p>
+                      <p>{pregunta_actual['explicacion']}</p>
+                  </div>
+                  """, unsafe_allow_html=True)
+              
+              st.session_state.pregunta_actual += 1
+              
+              if st.session_state.pregunta_actual >= len(preguntas):
+                  st.session_state.quiz_completado = True
+              
+              st.experimental_rerun()
+      
+      # Progreso del quiz
+      progress = st.session_state.pregunta_actual / len(preguntas)
+      st.progress(progress)
+      st.write(f"Progreso: {st.session_state.pregunta_actual}/{len(preguntas)}")
+  
+  else:
+      # Resultados finales
+      st.markdown("## 🎉 ¡Quiz Completado!")
+      
+      score_percentage = (st.session_state.quiz_score / st.session_state.quiz_total) * 100
+      
+      col1, col2, col3 = st.columns(3)
+      with col1:
+          st.metric("Respuestas Correctas", st.session_state.quiz_score)
+      with col2:
+          st.metric("Total de Preguntas", st.session_state.quiz_total)
+      with col3:
+          st.metric("Puntuación", f"{score_percentage:.1f}%")
+      
+      if score_percentage >= 80:
+          st.success("🏆 
