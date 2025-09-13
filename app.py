@@ -344,29 +344,6 @@ elif seccion == "📊 Comparación Detallada":
           </div>
           <small>{privado_score}/10</small>
           """, unsafe_allow_html=True)
-  
-  # Tabla detallada
-  st.markdown("### 📋 Tabla Comparativa Detallada")
-  
-  detailed_comparison = {
-      "Aspecto": [
-          "💰 Costo", "🔍 Transparencia", "🔧 Flexibilidad", "🛠️ Soporte",
-          "🔒 Seguridad", "📈 Control", "🌍 Libertad", "⚡ Innovación"
-      ],
-      "Software Libre": [
-          "Gratuito (generalmente)", "Código abierto y auditable", "Total personalización",
-          "Comunidad + comercial", "Transparente y colaborativa", "Usuario controla",
-          "Sin restricciones", "Innovación colaborativa"
-      ],
-      "Software Privado": [
-          "Licencias de pago", "Código cerrado", "Limitada por fabricante",
-          "Soporte oficial", "Depende del fabricante", "Fabricante controla",
-          "Restricciones de licencia", "Innovación controlada"
-      ]
-  }
-  
-  df_detailed = pd.DataFrame(detailed_comparison)
-  st.dataframe(df_detailed, use_container_width=True)
 
 # Sección: Ejemplos Prácticos
 elif seccion == "💡 Ejemplos Prácticos":
@@ -410,67 +387,6 @@ elif seccion == "💡 Ejemplos Prácticos":
                       'tipo': 'privado',
                       'categoria': categoria
                   }
-  
-  # Mostrar información detallada del software seleccionado
-  if st.session_state.current_comparison:
-      comp = st.session_state.current_comparison
-      st.markdown("---")
-      st.markdown(f"### 📋 Información Detallada: {comp['software']}")
-      
-      # Información detallada de software específico
-      info_software = {
-          'Firefox': {
-              'descripcion': 'Navegador web libre desarrollado por Mozilla Foundation',
-              'licencia': 'Mozilla Public License 2.0',
-              'ventajas': ['Privacidad por defecto', 'Extensiones potentes', 'Código abierto', 'Multiplataforma'],
-              'desventajas': ['Menor cuota de mercado', 'Algunos sitios optimizados para Chrome', 'Consumo de memoria'],
-              'alternativas': ['Chromium', 'Brave Browser']
-          },
-          'Linux Ubuntu': {
-              'descripcion': 'Distribución de Linux basada en Debian, enfocada en facilidad de uso',
-              'licencia': 'GPL y otras licencias libres',
-              'ventajas': ['Gratuito', 'Seguro', 'Personalizable', 'Gran comunidad'],
-              'desventajas': ['Curva de aprendizaje', 'Compatibilidad de software comercial', 'Soporte de hardware específico'],
-              'alternativas': ['Fedora', 'Debian', 'Linux Mint']
-          },
-          'LibreOffice': {
-              'descripcion': 'Suite ofimática libre y gratuita, fork de OpenOffice',
-              'licencia': 'Mozilla Public License 2.0',
-              'ventajas': ['Gratuito', 'Compatible con formatos MS Office', 'Multiplataforma', 'Sin telemetría'],
-              'desventajas': ['Interfaz menos moderna', 'Funciones avanzadas limitadas', 'Rendimiento en documentos grandes'],
-              'alternativas': ['Apache OpenOffice', 'OnlyOffice']
-          }
-      }
-      
-      # Información por defecto
-      default_info = {
-          'descripcion': f'{comp["software"]} - Software de {comp["categoria"]}',
-          'licencia': 'GPL/MIT/Apache' if comp['tipo'] == 'libre' else 'Licencia Propietaria',
-          'ventajas': ['Código abierto', 'Gratuito', 'Personalizable', 'Comunidad activa'] if comp['tipo'] == 'libre' 
-                     else ['Soporte oficial', 'Interfaz pulida', 'Documentación completa', 'Funciones avanzadas'],
-          'desventajas': ['Curva de aprendizaje', 'Soporte limitado'] if comp['tipo'] == 'libre' 
-                        else ['Costo elevado', 'Dependencia del proveedor', 'Licencias restrictivas'],
-          'alternativas': ['Consultar repositorios'] if comp['tipo'] == 'libre' else ['Opciones limitadas']
-      }
-      
-      info = info_software.get(comp['software'], default_info)
-      
-      col1, col2 = st.columns(2)
-      
-      with col1:
-          st.markdown("#### 📝 Descripción")
-          st.write(info['descripcion'])
-          st.markdown("#### 📄 Licencia")
-          st.write(info['licencia'])
-      
-      with col2:
-          st.markdown("#### ✅ Ventajas")
-          for ventaja in info['ventajas']:
-              st.write(f"• {ventaja}")
-          
-          st.markdown("#### ❌ Desventajas")
-          for desventaja in info['desventajas']:
-              st.write(f"• {desventaja}")
 
 # Sección: Análisis de Costos
 elif seccion == "📈 Análisis de Costos":
@@ -559,28 +475,6 @@ elif seccion == "🎮 Quiz Interactivo":
           ],
           "respuesta_correcta": 2,
           "explicacion": "Microsoft Office es software propietario, mientras que los demás son ejemplos de software libre."
-      },
-      {
-          "pregunta": "¿Qué ventaja principal tiene el software libre en términos de seguridad?",
-          "opciones": [
-              "No tiene vulnerabilidades",
-              "El código puede ser auditado por cualquiera",
-              "Solo lo usan hackers",
-              "Es más lento y por eso más seguro"
-          ],
-          "respuesta_correcta": 1,
-          "explicacion": "La transparencia del código permite que cualquier persona pueda auditarlo y encontrar vulnerabilidades."
-      },
-      {
-          "pregunta": "¿Cuál es una desventaja común del software libre?",
-          "opciones": [
-              "Es muy caro",
-              "No se puede modificar",
-              "Puede tener una curva de aprendizaje más pronunciada",
-              "Solo funciona en servidores"
-          ],
-          "respuesta_correcta": 2,
-          "explicacion": "Muchas veces el software libre requiere más conocimientos técnicos para su uso y configuración."
       }
   ]
   
@@ -624,7 +518,7 @@ elif seccion == "🎮 Quiz Interactivo":
               if st.session_state.pregunta_actual >= len(preguntas):
                   st.session_state.quiz_completado = True
               
-              st.experimental_rerun()
+              st.rerun()
       
       # Progreso del quiz
       progress = st.session_state.pregunta_actual / len(preguntas)
@@ -646,4 +540,117 @@ elif seccion == "🎮 Quiz Interactivo":
           st.metric("Puntuación", f"{score_percentage:.1f}%")
       
       if score_percentage >= 80:
-          st.success("🏆 
+          st.success("🏆 ¡Excelente! Tienes un gran conocimiento sobre software libre.")
+      elif score_percentage >= 60:
+          st.info("👍 ¡Bien! Tienes conocimientos básicos, pero puedes mejorar.")
+      else:
+          st.warning("📚 Te recomendamos revisar el material nuevamente.")
+      
+      if st.button("Reiniciar Quiz"):
+          st.session_state.quiz_score = 0
+          st.session_state.quiz_total = 0
+          st.session_state.pregunta_actual = 0
+          st.session_state.quiz_completado = False
+          st.rerun()
+
+# Sección: Casos de Estudio
+elif seccion == "📚 Casos de Estudio":
+  st.markdown("## 📚 Casos de Estudio")
+  
+  casos = [
+      {
+          "titulo": "🏛️ Migración del Gobierno de Munich a Linux",
+          "descripcion": "La ciudad de Munich migró 15,000 PCs de Windows a Linux, ahorrando millones en licencias.",
+          "resultados": ["Ahorro de €10+ millones", "Mayor control sobre el software", "Reducción de dependencia de proveedores"],
+          "desafios": ["Resistencia al cambio", "Capacitación del personal", "Compatibilidad con software específico"]
+      },
+      {
+          "titulo": "🏥 Sistema de Salud de Brasil",
+          "descripcion": "Brasil implementó software libre en hospitales públicos para reducir costos y mejorar la seguridad.",
+          "resultados": ["Ahorro de $100+ millones", "Mejor seguridad de datos", "Personalización para necesidades locales"],
+          "desafios": ["Capacitación médica", "Integración con sistemas existentes", "Soporte técnico"]
+      },
+      {
+          "titulo": "🎓 Universidad de Harvard",
+          "descripcion": "Harvard adoptó LibreOffice en todas sus computadoras estudiantiles.",
+          "resultados": ["Ahorro anual de $500,000", "Acceso universal para estudiantes", "Formato abierto para documentos"],
+          "desafios": ["Compatibilidad con documentos externos", "Curva de aprendizaje", "Soporte técnico"]
+      }
+  ]
+  
+  for caso in casos:
+      st.markdown(f"""
+      <div class="case-study">
+          <h3>{caso['titulo']}</h3>
+          <p>{caso['descripcion']}</p>
+          <div style="margin-top: 1rem;">
+              <strong>✅ Resultados Positivos:</strong>
+              <ul>
+                  {''.join([f'<li>{resultado}</li>' for resultado in caso['resultados']])}
+              </ul>
+              <strong>⚠️ Desafíos Enfrentados:</strong>
+              <ul>
+                  {''.join([f'<li>{desafio}</li>' for desafio in caso['desafios']])}
+              </ul>
+          </div>
+      </div>
+      """, unsafe_allow_html=True)
+
+# Sección: Tendencias Futuras
+elif seccion == "🔮 Tendencias Futuras":
+  st.markdown("## 🔮 Tendencias Futuras")
+  
+  tendencias = [
+      {
+          "titulo": "🤖 Inteligencia Artificial Open Source",
+          "descripcion": "Modelos de IA como LLaMA, Stable Diffusion y otros están democratizando el acceso a la IA.",
+          "impacto": "Alto",
+          "tiempo": "2024-2026"
+      },
+      {
+          "titulo": "☁️ Cloud Computing Libre",
+          "descripcion": "Plataformas como OpenStack y Kubernetes están redefiniendo la infraestructura cloud.",
+          "impacto": "Alto",
+          "tiempo": "2024-2025"
+      },
+      {
+          "titulo": "🔐 Blockchain y Criptomonedas",
+          "descripcion": "La mayoría de proyectos blockchain son de código abierto, impulsando la innovación financiera.",
+          "impacto": "Medio",
+          "tiempo": "2024-2027"
+      },
+      {
+          "titulo": "🌐 Web3 y Descentralización",
+          "descripcion": "Protocolos abiertos están creando una internet más descentralizada y libre.",
+          "impacto": "Alto",
+          "tiempo": "2025-2030"
+      }
+  ]
+  
+  for tendencia in tendencias:
+      color = "#28a745" if tendencia["impacto"] == "Alto" else "#ffc107" if tendencia["impacto"] == "Medio" else "#6c757d"
+      st.markdown(f"""
+      <div class="trend-card">
+          <h3>{tendencia['titulo']}</h3>
+          <p>{tendencia['descripcion']}</p>
+          <div style="margin-top: 1rem;">
+              <span style="background: {color}; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">
+                  Impacto: {tendencia['impacto']}
+              </span>
+              <span style="background: #007bff; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; margin-left: 0.5rem;">
+                  Período: {tendencia['tiempo']}
+              </span>
+          </div>
+      </div>
+      """, unsafe_allow_html=True)
+  
+  st.markdown("### 📊 Predicciones para 2030")
+  
+  predicciones = {
+      "Adopción de Software Libre en Empresas": "85%",
+      "Servidores Web con Software Libre": "90%",
+      "Dispositivos IoT con Software Libre": "70%",
+      "Proyectos de IA Open Source": "60%"
+  }
+  
+  cols =
