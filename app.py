@@ -1,7 +1,5 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
 from datetime import datetime
 import random
 
@@ -36,11 +34,6 @@ st.markdown("""
       transition: transform 0.3s ease;
   }
   
-  .software-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-  }
-  
   .libre-card {
       border-left-color: #28a745;
       background: linear-gradient(135deg, #f8fff9 0%, #e8f5e8 100%);
@@ -51,26 +44,12 @@ st.markdown("""
       background: linear-gradient(135deg, #fff8f8 0%, #ffe8e8 100%);
   }
   
-  .comparison-table {
-      background: white;
-      border-radius: 10px;
-      padding: 1rem;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  }
-  
   .metric-card {
       background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
       padding: 1.5rem;
       border-radius: 10px;
       text-align: center;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      margin: 0.5rem 0;
-  }
-  
-  .pros-cons {
-      background: #f8f9fa;
-      padding: 1rem;
-      border-radius: 8px;
       margin: 0.5rem 0;
   }
   
@@ -109,12 +88,35 @@ st.markdown("""
       border-left: 4px solid #2196f3;
   }
   
-  .trend-card {
-      background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+  .comparison-bar {
+      background: #f8f9fa;
+      height: 30px;
+      border-radius: 15px;
+      margin: 10px 0;
+      position: relative;
+      overflow: hidden;
+  }
+  
+  .bar-fill-libre {
+      background: #28a745;
+      height: 100%;
+      border-radius: 15px;
+      transition: width 0.5s ease;
+  }
+  
+  .bar-fill-privado {
+      background: #dc3545;
+      height: 100%;
+      border-radius: 15px;
+      transition: width 0.5s ease;
+  }
+  
+  .cost-summary {
+      background: linear-gradient(135deg, #fff9c4 0%, #f7dc6f 100%);
       padding: 1.5rem;
       border-radius: 10px;
       margin: 1rem 0;
-      border-left: 4px solid #ff9800;
+      border-left: 4px solid #f39c12;
   }
 </style>
 """, unsafe_allow_html=True)
@@ -275,6 +277,7 @@ if seccion == "🏠 Inicio":
       {"año": 1983, "evento": "Richard Stallman inicia el Proyecto GNU", "tipo": "libre"},
       {"año": 1991, "evento": "Linus Torvalds crea Linux", "tipo": "libre"},
       {"año": 1998, "evento": "Se acuña el término 'Open Source'", "tipo": "libre"},
+      {"año": 2004, "evento": "Ubuntu democratiza Linux", "tipo": "libre"},
       {"año": 1975, "evento": "Microsoft fundada - modelo propietario", "tipo": "privado"},
       {"año": 1984, "evento": "Apple Macintosh - interfaz propietaria", "tipo": "privado"},
       {"año": 2001, "evento": "Windows XP - dominancia del escritorio", "tipo": "privado"}
@@ -303,42 +306,36 @@ elif seccion == "📊 Comparación Detallada":
   libre_scores = [9, 10, 10, 7, 9, 8, 10, 7, 10, 6, 7, 8]
   privado_scores = [3, 2, 3, 9, 7, 6, 4, 9, 5, 9, 8, 8]
   
-  comparison_df = pd.DataFrame({
-      'Aspecto': aspectos,
-      'Software Libre': libre_scores,
-      'Software Privado': privado_scores
-  })
+  # Mostrar comparación con barras CSS
+  st.markdown("### 📊 Comparación Visual por Aspectos")
   
-  # Gráfico radar
-  fig = go.Figure()
-  
-  fig.add_trace(go.Scatterpolar(
-      r=libre_scores,
-      theta=aspectos,
-      fill='toself',
-      name='Software Libre',
-      line_color='#28a745'
-  ))
-  
-  fig.add_trace(go.Scatterpolar(
-      r=privado_scores,
-      theta=aspectos,
-      fill='toself',
-      name='Software Privado',
-      line_color='#dc3545'
-  ))
-  
-  fig.update_layout(
-      polar=dict(
-          radialaxis=dict(
-              visible=True,
-              range=[0, 10]
-          )),
-      showlegend=True,
-      title="Comparación por Aspectos (Escala 1-10)"
-  )
-  
-  st.plotly_chart(fig, use_container_width=True)
+  for i, aspecto in enumerate(aspectos):
+      libre_score = libre_scores[i]
+      privado_score = privado_scores[i]
+      
+      st.markdown(f"**{aspecto}**")
+      
+      col1, col2 = st.columns(2)
+      
+      with col1:
+          st.markdown("Software Libre")
+          libre_width = (libre_score / 10) * 100
+          st.markdown(f"""
+          <div class="comparison-bar">
+              <div class="bar-fill-libre" style="width: {libre_width}%"></div>
+          </div>
+          <small>{libre_score}/10</small>
+          """, unsafe_allow_html=True)
+      
+      with col2:
+          st.markdown("Software Privado")
+          privado_width = (privado_score / 10) * 100
+          st.markdown(f"""
+          <div class="comparison-bar">
+              <div class="bar-fill-privado" style="width: {privado_width}%"></div>
+          </div>
+          <small>{privado_score}/10</small>
+          """, unsafe_allow_html=True)
   
   # Tabla detallada
   st.markdown("### 📋 Tabla Comparativa Detallada")
@@ -391,20 +388,6 @@ elif seccion == "📊 Comparación Detallada":
           if libre_score == privado_score:
               winner = "Empate"
           st.metric("Ganador", winner)
-      
-      # Gráfico de barras para el aspecto seleccionado
-      fig_bar = px.bar(
-          x=['Software Libre', 'Software Privado'],
-          y=[libre_score, privado_score],
-          title=f"Comparación: {aspecto_seleccionado}",
-          color=['Software Libre', 'Software Privado'],
-          color_discrete_map={
-              'Software Libre': '#28a745',
-              'Software Privado': '#dc3545'
-          }
-      )
-      fig_bar.update_layout(showlegend=False)
-      st.plotly_chart(fig_bar, use_container_width=True)
 
 # Sección: Ejemplos Prácticos
 elif seccion == "💡 Ejemplos Prácticos":
@@ -461,37 +444,36 @@ elif seccion == "💡 Ejemplos Prácticos":
               'descripcion': 'Navegador web libre desarrollado por Mozilla Foundation',
               'licencia': 'Mozilla Public License 2.0',
               'ventajas': ['Privacidad por defecto', 'Extensiones potentes', 'Código abierto', 'Multiplataforma'],
-              'desventajas': ['Menor cuota de mercado', 'Algunos sitios optimizados para Chrome', 'Consumo de memoria']
+              'desventajas': ['Menor cuota de mercado', 'Algunos sitios optimizados para Chrome', 'Consumo de memoria'],
+              'alternativas': ['Chromium', 'Brave Browser']
           },
           'Linux Ubuntu': {
               'descripcion': 'Distribución de Linux basada en Debian, enfocada en facilidad de uso',
               'licencia': 'GPL y otras licencias libres',
               'ventajas': ['Gratuito', 'Seguro', 'Personalizable', 'Gran comunidad'],
-              'desventajas': ['Curva de aprendizaje', 'Compatibilidad de software comercial', 'Soporte de hardware específico']
+              'desventajas': ['Curva de aprendizaje', 'Compatibilidad de software comercial', 'Soporte de hardware específico'],
+              'alternativas': ['Fedora', 'Debian', 'Linux Mint']
           },
           'LibreOffice': {
               'descripcion': 'Suite ofimática libre y gratuita, fork de OpenOffice',
               'licencia': 'Mozilla Public License 2.0',
               'ventajas': ['Gratuito', 'Compatible con formatos MS Office', 'Multiplataforma', 'Sin telemetría'],
-              'desventajas': ['Interfaz menos moderna', 'Funciones avanzadas limitadas', 'Rendimiento en documentos grandes']
+              'desventajas': ['Interfaz menos moderna', 'Funciones avanzadas limitadas', 'Rendimiento en documentos grandes'],
+              'alternativas': ['Apache OpenOffice', 'OnlyOffice']
           },
           'Windows 11': {
               'descripcion': 'Sistema operativo propietario más reciente de Microsoft',
               'licencia': 'Licencia de Software de Microsoft',
               'ventajas': ['Compatibilidad amplia', 'Soporte oficial', 'Interfaz moderna', 'Gaming optimizado'],
-              'desventajas': ['Costo de licencia', 'Telemetría extensiva', 'Requisitos de hardware', 'Actualizaciones forzadas']
+              'desventajas': ['Costo de licencia', 'Telemetría extensiva', 'Requisitos de hardware', 'Actualizaciones forzadas'],
+              'alternativas': ['macOS', 'Chrome OS']
           },
           'Microsoft Office': {
               'descripcion': 'Suite ofimática propietaria líder en el mercado empresarial',
               'licencia': 'Licencia comercial de Microsoft',
               'ventajas': ['Estándar de la industria', 'Funciones avanzadas', 'Integración con servicios MS', 'Soporte profesional'],
-              'desventajas': ['Costo elevado', 'Dependencia del proveedor', 'Modelo de suscripción', 'Telemetría']
-          },
-          'Adobe Photoshop': {
-              'descripcion': 'Editor de imágenes profesional líder en la industria',
-              'licencia': 'Licencia comercial de Adobe',
-              'ventajas': ['Herramientas profesionales', 'Estándar de la industria', 'Actualizaciones constantes', 'Integración Creative Cloud'],
-              'desventajas': ['Muy costoso', 'Solo suscripción', 'Curva de aprendizaje', 'Dependencia de Adobe']
+              'desventajas': ['Costo elevado', 'Dependencia del proveedor', 'Modelo de suscripción', 'Telemetría'],
+              'alternativas': ['Google Workspace', 'Apple iWork']
           }
       }
       
@@ -502,7 +484,8 @@ elif seccion == "💡 Ejemplos Prácticos":
           'ventajas': ['Código abierto', 'Gratuito', 'Personalizable', 'Comunidad activa'] if comp['tipo'] == 'libre' 
                      else ['Soporte oficial', 'Interfaz pulida', 'Documentación completa', 'Funciones avanzadas'],
           'desventajas': ['Curva de aprendizaje', 'Soporte limitado'] if comp['tipo'] == 'libre' 
-                        else ['Costo elevado', 'Dependencia del proveedor', 'Licencias restrictivas']
+                        else ['Costo elevado', 'Dependencia del proveedor', 'Licencias restrictivas'],
+          'alternativas': ['Consultar repositorios'] if comp['tipo'] == 'libre' else ['Opciones limitadas']
       }
       
       info = info_software.get(comp['software'], default_info)
@@ -523,6 +506,10 @@ elif seccion == "💡 Ejemplos Prácticos":
           st.markdown("#### ❌ Desventajas")
           for desventaja in info['desventajas']:
               st.write(f"• {desventaja}")
+      
+      if 'alternativas' in info:
+          st.markdown("#### 🔄 Alternativas")
+          st.write(", ".join(info['alternativas']))
 
 # Sección: Análisis de Costos
 elif seccion == "📈 Análisis de Costos":
@@ -573,62 +560,51 @@ elif seccion == "📈 Análisis de Costos":
       st.metric("Ahorro Total", f"${ahorro:,.2f}", 
                delta=f"{(ahorro/costo_privado)*100:.1f}%" if costo_privado > 0 else "0%")
   
-  # Gráfico de costos por año
-  años_lista = list(range(1, años + 1))
-  costos_privado_acum = []
-  costos_libre_acum = []
+  # Resumen de costos
+  st.markdown(f"""
+  <div class="cost-summary">
+      <h4>💡 Resumen de Análisis</h4>
+      <p><strong>Configuración:</strong> {num_usuarios} usuarios por {años} años</p>
+      <p><strong>Ahorro estimado:</strong> ${ahorro:,.2f} ({(ahorro/costo_privado)*100:.1f}% menos)</p>
+      <p><strong>Ahorro por usuario/año:</strong> ${ahorro/(num_usuarios*años):,.2f}</p>
+  </div>
+  """, unsafe_allow_html=True)
   
-  for año in años_lista:
-      costo_p = (
-          (costo_licencia_office * año * num_usuarios) +
-          (costo_licencia_windows * num_usuarios) +
-          (costo_soporte * año * num_usuarios if incluir_soporte else 0) +
-          (costo_capacitacion * num_usuarios if incluir_capacitacion else 0) +
-          (costo_migracion * num_usuarios if incluir_migracion else 0)
-      )
-      
-      costo_l = (
-          (costo_soporte * 0.4 * año * num_usuarios if incluir_soporte else 0) +
-          (costo_capacitacion * 0.6 * num_usuarios if incluir_capacitacion else 0) +
-          (costo_migracion * 1.2 * num_usuarios if incluir_migracion else 0)
-      )
-      
-      costos_privado_acum.append(costo_p)
-      costos_libre_acum.append(costo_l)
+  # Tabla de costos detallada
+  st.markdown("### 📊 Desglose Detallado de Costos")
   
-  df_costos = pd.DataFrame({
-      'Año': años_lista,
-      'Software Privado': costos_privado_acum,
-      'Software Libre': costos_libre_acum
-  })
+  cost_breakdown = {
+      'Concepto': ['Licencias Office', 'Licencias SO', 'Soporte Técnico', 'Capacitación', 'Migración', 'TOTAL'],
+      'Software Privado': [
+          f"${costo_licencia_office * años * num_usuarios:,.2f}",
+          f"${costo_licencia_windows * num_usuarios:,.2f}",
+          f"${costo_soporte * años * num_usuarios if incluir_soporte else 0:,.2f}",
+          f"${costo_capacitacion * num_usuarios if incluir_capacitacion else 0:,.2f}",
+          f"${costo_migracion * num_usuarios if incluir_migracion else 0:,.2f}",
+          f"${costo_privado:,.2f}"
+      ],
+      'Software Libre': [
+          "$0.00",
+          "$0.00",
+          f"${costo_soporte * 0.4 * años * num_usuarios if incluir_soporte else 0:,.2f}",
+          f"${costo_capacitacion * 0.6 * num_usuarios if incluir_capacitacion else 0:,.2f}",
+          f"${costo_migracion * 1.2 * num_usuarios if incluir_migracion else 0:,.2f}",
+          f"${costo_libre:,.2f}"
+      ]
+  }
   
-  fig_costos = px.line(
-      df_costos, 
-      x='Año', 
-      y=['Software Privado', 'Software Libre'],
-      title='Evolución de Costos Acumulados',
-      labels={'value': 'Costo (USD)', 'variable': 'Tipo de Software'},
-      color_discrete_map={
-          'Software Privado': '#dc3545',
-          'Software Libre': '#28a745'
-      }
-  )
+  df_costs = pd.DataFrame(cost_breakdown)
+  st.dataframe(df_costs, use_container_width=True)
+
+# Sección: Quiz Interactivo
+elif seccion == "🎮 Quiz Interactivo":
+  st.markdown("## 🎮 Quiz Interactivo")
   
-  st.plotly_chart(fig_costos, use_container_width=True)
-  
-  # Desglose de costos
-  st.markdown("### 📊 Desglose de Costos")
-  
-  if costo_privado > 0:
-      labels_privado = []
-      values_privado = []
-      
-      office_cost = costo_licencia_office * años * num_usuarios
-      windows_cost = costo_licencia_windows * num_usuarios
-      support_cost = costo_soporte * años * num_usuarios if incluir_soporte else 0
-      training_cost = costo_capacitacion * num_usuarios if incluir_capacitacion else 0
-      migration_cost = costo_migracion * num_usuarios if incluir_migracion else 0
-      
-      if office_cost > 0:
-          labels_privado.append('Licencias Office')
-          values_privado.appen
+  # Preguntas del quiz
+  preguntas = [
+      {
+          "pregunta": "¿Cuál es la principal característica del software libre?",
+          "opciones": [
+              "Es gratuito",
+              "El código fuente está disponible",
+              "No
