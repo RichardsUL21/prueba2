@@ -653,4 +653,4 @@ elif seccion == "🔮 Tendencias Futuras":
       "Proyectos de IA Open Source": "60%"
   }
   
-  cols =
+  
