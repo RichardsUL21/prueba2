@@ -5,7 +5,7 @@ import random
 
 # Configuración de la página
 st.set_page_config(
-  page_title="🆓 Software Libre vs 💰 Software Privado",
+  page_title="📋 Ejemplos: Software Libre vs Privado",
   page_icon="🖥️",
   layout="wide",
   initial_sidebar_state="expanded"
@@ -44,22 +44,13 @@ st.markdown("""
       background: linear-gradient(135deg, #fff8f8 0%, #ffe8e8 100%);
   }
   
-  .metric-card {
-      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-      padding: 1.5rem;
-      border-radius: 10px;
-      text-align: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      margin: 0.5rem 0;
-  }
-  
-  .timeline-item {
-      background: white;
-      padding: 1rem;
-      border-radius: 8px;
-      margin: 0.5rem 0;
-      border-left: 3px solid #007bff;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  .quiz-card {
+      background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+      padding: 2rem;
+      border-radius: 15px;
+      margin: 1rem 0;
+      border-left: 4px solid #2196f3;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
   
   .quiz-correct {
@@ -69,6 +60,7 @@ st.markdown("""
       padding: 1rem;
       border-radius: 8px;
       margin: 0.5rem 0;
+      animation: fadeIn 0.5s;
   }
   
   .quiz-incorrect {
@@ -78,96 +70,407 @@ st.markdown("""
       padding: 1rem;
       border-radius: 8px;
       margin: 0.5rem 0;
+      animation: fadeIn 0.5s;
   }
   
-  .case-study {
-      background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-      padding: 1.5rem;
-      border-radius: 10px;
+  .apa-report {
+      background: white;
+      padding: 2rem;
+      font-family: 'Times New Roman', serif;
+      line-height: 2;
+      text-align: justify;
+      border: 1px solid #ddd;
       margin: 1rem 0;
-      border-left: 4px solid #2196f3;
+      font-size: 12pt;
   }
   
-  .comparison-bar {
+  .apa-title {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 2rem;
+      font-size: 14pt;
+  }
+  
+  .apa-author {
+      text-align: center;
+      margin-bottom: 1rem;
+  }
+  
+  .apa-institution {
+      text-align: center;
+      margin-bottom: 2rem;
+  }
+  
+  .apa-abstract {
+      margin: 2rem 0;
+      text-indent: 0;
+  }
+  
+  .apa-paragraph {
+      text-indent: 0.5in;
+      margin-bottom: 1rem;
+  }
+  
+  .apa-figure {
+      text-align: center;
+      margin: 2rem 0;
+  }
+  
+  .software-example {
       background: #f8f9fa;
-      height: 30px;
-      border-radius: 15px;
-      margin: 10px 0;
-      position: relative;
-      overflow: hidden;
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 0.5rem 0;
+      border-left: 3px solid #007bff;
   }
   
-  .bar-fill-libre {
-      background: #28a745;
-      height: 100%;
-      border-radius: 15px;
-      transition: width 0.5s ease;
-  }
-  
-  .bar-fill-privado {
-      background: #dc3545;
-      height: 100%;
-      border-radius: 15px;
-      transition: width 0.5s ease;
-  }
-  
-  .cost-summary {
-      background: linear-gradient(135deg, #fff9c4 0%, #f7dc6f 100%);
-      padding: 1.5rem;
-      border-radius: 10px;
-      margin: 1rem 0;
-      border-left: 4px solid #f39c12;
-  }
-  
-  .trend-card {
-      background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-      padding: 1.5rem;
-      border-radius: 10px;
-      margin: 1rem 0;
-      border-left: 4px solid #ff9800;
+  @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
   }
 </style>
 """, unsafe_allow_html=True)
 
-# Datos de software
-SOFTWARE_LIBRE = {
-  "Sistemas Operativos": ["Linux Ubuntu", "Debian", "CentOS", "Fedora", "FreeBSD"],
-  "Navegadores": ["Firefox", "Chromium"],
-  "Oficina": ["LibreOffice", "Apache OpenOffice"],
-  "Diseño": ["GIMP", "Blender", "Inkscape", "Audacity"],
-  "Desarrollo": ["Visual Studio Code", "Eclipse", "Git", "Apache", "MySQL"],
-  "Multimedia": ["VLC Media Player", "OBS Studio", "Krita"],
-  "Herramientas": ["7-Zip", "FileZilla", "Wireshark"]
+# Base de datos completa de ejemplos de software
+EJEMPLOS_SOFTWARE = {
+  "Sistemas Operativos": {
+      "libre": [
+          {
+              "nombre": "Ubuntu Linux",
+              "descripcion": "Distribución de Linux fácil de usar basada en Debian",
+              "licencia": "GPL v3",
+              "desarrollador": "Canonical Ltd.",
+              "año": 2004,
+              "ventajas": ["Gratuito", "Seguro", "Personalizable", "Gran comunidad"],
+              "desventajas": ["Curva de aprendizaje", "Compatibilidad limitada con algunos juegos"],
+              "uso_principal": "Escritorio, servidores, desarrollo"
+          },
+          {
+              "nombre": "Debian",
+              "descripcion": "Sistema operativo estable y robusto",
+              "licencia": "DFSG",
+              "desarrollador": "Proyecto Debian",
+              "año": 1993,
+              "ventajas": ["Muy estable", "Amplio repositorio", "Seguro"],
+              "desventajas": ["Software menos actualizado", "Configuración compleja"],
+              "uso_principal": "Servidores, sistemas críticos"
+          },
+          {
+              "nombre": "Fedora",
+              "descripcion": "Distribución innovadora patrocinada por Red Hat",
+              "licencia": "GPL",
+              "desarrollador": "Proyecto Fedora",
+              "año": 2003,
+              "ventajas": ["Tecnología de vanguardia", "Actualizaciones frecuentes", "Seguridad avanzada"],
+              "desventajas": ["Menos estable", "Ciclo de vida corto"],
+              "uso_principal": "Desarrollo, escritorio avanzado"
+          }
+      ],
+      "privado": [
+          {
+              "nombre": "Windows 11",
+              "descripcion": "Sistema operativo de Microsoft para PC",
+              "licencia": "Propietaria",
+              "desarrollador": "Microsoft",
+              "año": 2021,
+              "ventajas": ["Interfaz familiar", "Amplia compatibilidad", "Soporte oficial"],
+              "desventajas": ["Costo elevado", "Telemetría", "Vulnerabilidades frecuentes"],
+              "uso_principal": "Escritorio, gaming, oficina"
+          },
+          {
+              "nombre": "macOS",
+              "descripcion": "Sistema operativo de Apple para Mac",
+              "licencia": "Propietaria",
+              "desarrollador": "Apple Inc.",
+              "año": 2001,
+              "ventajas": ["Diseño elegante", "Integración con ecosistema Apple", "Estabilidad"],
+              "desventajas": ["Hardware limitado", "Costo alto", "Menos personalizable"],
+              "uso_principal": "Diseño, desarrollo iOS, multimedia"
+          }
+      ]
+  },
+  "Navegadores Web": {
+      "libre": [
+          {
+              "nombre": "Mozilla Firefox",
+              "descripcion": "Navegador web enfocado en privacidad",
+              "licencia": "Mozilla Public License",
+              "desarrollador": "Mozilla Foundation",
+              "año": 2004,
+              "ventajas": ["Privacidad por defecto", "Extensiones potentes", "Código abierto"],
+              "desventajas": ["Menor cuota de mercado", "Consumo de memoria"],
+              "uso_principal": "Navegación privada, desarrollo web"
+          },
+          {
+              "nombre": "Chromium",
+              "descripcion": "Proyecto de código abierto base de Chrome",
+              "licencia": "BSD",
+              "desarrollador": "Proyecto Chromium",
+              "año": 2008,
+              "ventajas": ["Rápido", "Estándares web", "Sin servicios de Google"],
+              "desventajas": ["Menos funciones que Chrome", "Actualizaciones manuales"],
+              "uso_principal": "Navegación, desarrollo web"
+          }
+      ],
+      "privado": [
+          {
+              "nombre": "Google Chrome",
+              "descripcion": "Navegador web más popular del mundo",
+              "licencia": "Propietaria",
+              "desarrollador": "Google",
+              "año": 2008,
+              "ventajas": ["Rápido", "Sincronización", "Amplia compatibilidad"],
+              "desventajas": ["Recopilación de datos", "Consumo de memoria", "Dependencia de Google"],
+              "uso_principal": "Navegación general, aplicaciones web"
+          },
+          {
+              "nombre": "Safari",
+              "descripcion": "Navegador web de Apple",
+              "licencia": "Propietaria",
+              "desarrollador": "Apple Inc.",
+              "año": 2003,
+              "ventajas": ["Optimizado para Mac", "Eficiencia energética", "Privacidad"],
+              "desventajas": ["Solo en dispositivos Apple", "Extensiones limitadas"],
+              "uso_principal": "Navegación en ecosistema Apple"
+          }
+      ]
+  },
+  "Suites Ofimáticas": {
+      "libre": [
+          {
+              "nombre": "LibreOffice",
+              "descripcion": "Suite ofimática completa y gratuita",
+              "licencia": "Mozilla Public License",
+              "desarrollador": "The Document Foundation",
+              "año": 2011,
+              "ventajas": ["Gratuito", "Compatible con MS Office", "Multiplataforma"],
+              "desventajas": ["Interfaz menos moderna", "Funciones avanzadas limitadas"],
+              "uso_principal": "Documentos, hojas de cálculo, presentaciones"
+          },
+          {
+              "nombre": "Apache OpenOffice",
+              "descripcion": "Suite ofimática de código abierto",
+              "licencia": "Apache License 2.0",
+              "desarrollador": "Apache Software Foundation",
+              "año": 2012,
+              "ventajas": ["Gratuito", "Estable", "Formatos estándar"],
+              "desventajas": ["Desarrollo lento", "Interfaz desactualizada"],
+              "uso_principal": "Oficina básica, educación"
+          }
+      ],
+      "privado": [
+          {
+              "nombre": "Microsoft Office 365",
+              "descripcion": "Suite ofimática líder del mercado",
+              "licencia": "Propietaria",
+              "desarrollador": "Microsoft",
+              "año": 1990,
+              "ventajas": ["Funciones avanzadas", "Integración cloud", "Amplia adopción"],
+              "desventajas": ["Costo elevado", "Suscripción obligatoria", "Dependencia de Microsoft"],
+              "uso_principal": "Oficina profesional, empresas"
+          },
+          {
+              "nombre": "iWork",
+              "descripcion": "Suite ofimática de Apple",
+              "licencia": "Propietaria",
+              "desarrollador": "Apple Inc.",
+              "año": 2005,
+              "ventajas": ["Diseño elegante", "Integración con iCloud", "Gratuito para usuarios Mac"],
+              "desventajas": ["Solo ecosistema Apple", "Compatibilidad limitada"],
+              "uso_principal": "Documentos en Mac/iOS"
+          }
+      ]
+  },
+  "Editores de Imagen": {
+      "libre": [
+          {
+              "nombre": "GIMP",
+              "descripcion": "Editor de imágenes avanzado",
+              "licencia": "GPL v3",
+              "desarrollador": "Equipo GIMP",
+              "año": 1996,
+              "ventajas": ["Gratuito", "Muy potente", "Extensible con plugins"],
+              "desventajas": ["Interfaz compleja", "Curva de aprendizaje pronunciada"],
+              "uso_principal": "Edición profesional de imágenes"
+          },
+          {
+              "nombre": "Krita",
+              "descripcion": "Editor enfocado en arte digital",
+              "licencia": "GPL v3",
+              "desarrollador": "KDE",
+              "año": 2005,
+              "ventajas": ["Herramientas de pintura avanzadas", "Gratuito", "Orientado a artistas"],
+              "desventajas": ["Menos funciones de fotografía", "Consumo de recursos"],
+              "uso_principal": "Arte digital, ilustración"
+          }
+      ],
+      "privado": [
+          {
+              "nombre": "Adobe Photoshop",
+              "descripcion": "Editor de imágenes profesional líder",
+              "licencia": "Propietaria",
+              "desarrollador": "Adobe Systems",
+              "año": 1988,
+              "ventajas": ["Estándar de la industria", "Funciones avanzadas", "Amplio soporte"],
+              "desventajas": ["Muy caro", "Suscripción obligatoria", "Curva de aprendizaje"],
+              "uso_principal": "Diseño gráfico profesional, fotografía"
+          },
+          {
+              "nombre": "Canva",
+              "descripcion": "Editor de diseño gráfico online",
+              "licencia": "Propietaria",
+              "desarrollador": "Canva Pty Ltd",
+              "año": 2013,
+              "ventajas": ["Fácil de usar", "Plantillas prediseñadas", "Colaborativo"],
+              "desventajas": ["Funciones limitadas en versión gratuita", "Requiere internet"],
+              "uso_principal": "Diseño rápido, redes sociales"
+          }
+      ]
+  },
+  "Reproductores Multimedia": {
+      "libre": [
+          {
+              "nombre": "VLC Media Player",
+              "descripcion": "Reproductor multimedia universal",
+              "licencia": "GPL v2",
+              "desarrollador": "VideoLAN",
+              "año": 2001,
+              "ventajas": ["Reproduce todo", "Gratuito", "Sin codecs adicionales"],
+              "desventajas": ["Interfaz básica", "Funciones de organización limitadas"],
+              "uso_principal": "Reproducción de video y audio"
+          },
+          {
+              "nombre": "Audacity",
+              "descripcion": "Editor de audio de código abierto",
+              "licencia": "GPL v2",
+              "desarrollador": "Equipo Audacity",
+              "año": 2000,
+              "ventajas": ["Gratuito", "Multiplataforma", "Funciones profesionales"],
+              "desventajas": ["Interfaz desactualizada", "Curva de aprendizaje"],
+              "uso_principal": "Edición de audio, podcasting"
+          }
+      ],
+      "privado": [
+          {
+              "nombre": "Spotify",
+              "descripcion": "Servicio de streaming de música",
+              "licencia": "Propietaria",
+              "desarrollador": "Spotify Technology",
+              "año": 2006,
+              "ventajas": ["Amplio catálogo", "Recomendaciones personalizadas", "Multiplataforma"],
+              "desventajas": ["Suscripción para funciones completas", "Dependencia de internet"],
+              "uso_principal": "Streaming de música"
+          },
+          {
+              "nombre": "Adobe Premiere Pro",
+              "descripcion": "Editor de video profesional",
+              "licencia": "Propietaria",
+              "desarrollador": "Adobe Systems",
+              "año": 2003,
+              "ventajas": ["Herramientas profesionales", "Integración Creative Suite", "Efectos avanzados"],
+              "desventajas": ["Muy caro", "Suscripción obligatoria", "Requiere hardware potente"],
+              "uso_principal": "Edición de video profesional"
+          }
+      ]
+  }
 }
 
-SOFTWARE_PRIVADO = {
-  "Sistemas Operativos": ["Windows 11", "macOS", "iOS", "Android (Google)"],
-  "Navegadores": ["Google Chrome", "Safari", "Microsoft Edge"],
-  "Oficina": ["Microsoft Office", "Adobe Creative Suite"],
-  "Diseño": ["Adobe Photoshop", "Adobe Illustrator", "Sketch"],
-  "Desarrollo": ["Visual Studio", "JetBrains IDEs", "Xcode"],
-  "Multimedia": ["Adobe Premiere Pro", "Final Cut Pro", "Spotify Premium"],
-  "Herramientas": ["WinRAR", "TeamViewer", "Zoom Pro"]
-}
+# Preguntas del quiz sobre ejemplos específicos
+PREGUNTAS_EJEMPLOS = [
+  {
+      "pregunta": "¿Cuál de estos navegadores es software libre?",
+      "opciones": ["Google Chrome", "Mozilla Firefox", "Safari", "Microsoft Edge"],
+      "respuesta_correcta": 1,
+      "explicacion": "Mozilla Firefox es software libre bajo la Mozilla Public License, mientras que los demás son propietarios.",
+      "categoria": "Navegadores"
+  },
+  {
+      "pregunta": "¿Qué suite ofimática libre es más popular?",
+      "opciones": ["Microsoft Office", "LibreOffice", "iWork", "Google Workspace"],
+      "respuesta_correcta": 1,
+      "explicacion": "LibreOffice es la suite ofimática libre más popular y ampliamente utilizada.",
+      "categoria": "Oficina"
+  },
+  {
+      "pregunta": "¿Cuál es la alternativa libre más conocida a Photoshop?",
+      "opciones": ["Canva", "GIMP", "Paint.NET", "Pixlr"],
+      "respuesta_correcta": 1,
+      "explicacion": "GIMP (GNU Image Manipulation Program) es la alternativa libre más conocida y potente a Photoshop.",
+      "categoria": "Diseño"
+  },
+  {
+      "pregunta": "¿Qué reproductor multimedia libre reproduce prácticamente cualquier formato?",
+      "opciones": ["Windows Media Player", "iTunes", "VLC Media Player", "QuickTime"],
+      "respuesta_correcta": 2,
+      "explicacion": "VLC Media Player es conocido por reproducir prácticamente cualquier formato de audio y video.",
+      "categoria": "Multimedia"
+  },
+  {
+      "pregunta": "¿Cuál de estos sistemas operativos es completamente libre?",
+      "opciones": ["Windows 11", "macOS", "Ubuntu Linux", "Chrome OS"],
+      "respuesta_correcta": 2,
+      "explicacion": "Ubuntu Linux es completamente libre y de código abierto, basado en el kernel Linux.",
+      "categoria": "Sistemas Operativos"
+  },
+  {
+      "pregunta": "¿Qué editor de audio libre es más utilizado para podcasting?",
+      "opciones": ["Pro Tools", "Audacity", "Logic Pro", "Adobe Audition"],
+      "respuesta_correcta": 1,
+      "explicacion": "Audacity es el editor de audio libre más popular para podcasting y edición básica de audio.",
+      "categoria": "Multimedia"
+  },
+  {
+      "pregunta": "¿Cuál es la principal ventaja de usar LibreOffice sobre Microsoft Office?",
+      "opciones": ["Mejor interfaz", "Es gratuito", "Más funciones", "Mejor compatibilidad"],
+      "respuesta_correcta": 1,
+      "explicacion": "La principal ventaja de LibreOffice es que es completamente gratuito, sin costos de licencia.",
+      "categoria": "Oficina"
+  },
+  {
+      "pregunta": "¿Qué navegador está basado en el proyecto libre Chromium?",
+      "opciones": ["Firefox", "Safari", "Google Chrome", "Internet Explorer"],
+      "respuesta_correcta": 2,
+      "explicacion": "Google Chrome está basado en Chromium, que es un proyecto de código abierto.",
+      "categoria": "Navegadores"
+  },
+  {
+      "pregunta": "¿Cuál de estos es un editor de imágenes libre especializado en arte digital?",
+      "opciones": ["Photoshop", "Krita", "Illustrator", "CorelDRAW"],
+      "respuesta_correcta": 1,
+      "explicacion": "Krita es un editor libre especializado en arte digital y pintura.",
+      "categoria": "Diseño"
+  },
+  {
+      "pregunta": "¿Qué distribución de Linux es conocida por ser muy estable para servidores?",
+      "opciones": ["Ubuntu", "Fedora", "Debian", "Arch Linux"],
+      "respuesta_correcta": 2,
+      "explicacion": "Debian es conocida por su estabilidad y es ampliamente utilizada en servidores.",
+      "categoria": "Sistemas Operativos"
+  }
+]
 
 # Inicializar session state
 if 'quiz_score' not in st.session_state:
   st.session_state.quiz_score = 0
 if 'quiz_total' not in st.session_state:
   st.session_state.quiz_total = 0
-if 'current_comparison' not in st.session_state:
-  st.session_state.current_comparison = None
 if 'pregunta_actual' not in st.session_state:
   st.session_state.pregunta_actual = 0
 if 'quiz_completado' not in st.session_state:
   st.session_state.quiz_completado = False
+if 'quiz_iniciado' not in st.session_state:
+  st.session_state.quiz_iniciado = False
+if 'preguntas_seleccionadas' not in st.session_state:
+  st.session_state.preguntas_seleccionadas = []
+if 'respuestas_usuario' not in st.session_state:
+  st.session_state.respuestas_usuario = []
 
 # Header principal
 st.markdown("""
 <div class="main-header">
-  <h1>🖥️ Software Libre vs Software Privado</h1>
-  <h3>Guía Interactiva Completa</h3>
-  <p>Explora las diferencias, ventajas y desventajas de cada modelo de software</p>
+  <h1>📋 Ejemplos de Software Libre vs Software Privado</h1>
+  <h3>Catálogo Completo con Quiz e Informes APA</h3>
+  <p>Explora ejemplos reales, compara alternativas y genera informes académicos</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -176,481 +479,179 @@ st.sidebar.markdown("## 🎯 Navegación")
 seccion = st.sidebar.selectbox(
   "Selecciona una sección:",
   [
-      "🏠 Inicio",
-      "📊 Comparación Detallada", 
-      "💡 Ejemplos Prácticos",
-      "📈 Análisis de Costos",
-      "🎮 Quiz Interactivo",
-      "📚 Casos de Estudio",
-      "🔮 Tendencias Futuras"
+      "🏠 Catálogo de Ejemplos",
+      "🔍 Comparador de Software",
+      "🎮 Quiz de Ejemplos",
+      "📊 Análisis Estadístico",
+      "📄 Generar Informe APA"
   ]
 )
 
 st.sidebar.markdown("---")
-st.sidebar.markdown("### 📊 Estadísticas de Uso")
+st.sidebar.markdown("### 📊 Estadísticas")
 
-# Simular estadísticas
-total_software_libre = sum(len(v) for v in SOFTWARE_LIBRE.values())
-total_software_privado = sum(len(v) for v in SOFTWARE_PRIVADO.values())
+# Calcular estadísticas
+total_libre = sum(len(categoria["libre"]) for categoria in EJEMPLOS_SOFTWARE.values())
+total_privado = sum(len(categoria["privado"]) for categoria in EJEMPLOS_SOFTWARE.values())
+total_categorias = len(EJEMPLOS_SOFTWARE)
 
-st.sidebar.metric("Software Libre Ejemplos", total_software_libre)
-st.sidebar.metric("Software Privado Ejemplos", total_software_privado)
+st.sidebar.metric("Software Libre", total_libre)
+st.sidebar.metric("Software Privado", total_privado)
+st.sidebar.metric("Categorías", total_categorias)
 
 if st.session_state.quiz_total > 0:
   accuracy = (st.session_state.quiz_score / st.session_state.quiz_total) * 100
-  st.sidebar.metric("Precisión en Quiz", f"{accuracy:.1f}%")
+  st.sidebar.metric("Precisión Quiz", f"{accuracy:.1f}%")
 
-# Sección: Inicio
-if seccion == "🏠 Inicio":
-  st.markdown("## 🌟 Bienvenido a la Guía Interactiva")
-  
-  col1, col2 = st.columns(2)
-  
-  with col1:
-      st.markdown("""
-      <div class="software-card libre-card">
-          <h3>🆓 Software Libre</h3>
-          <p><strong>Definición:</strong> Software que respeta la libertad de los usuarios. Puedes ejecutar, copiar, distribuir, estudiar, modificar y mejorar el software.</p>
-          <h4>🔑 Características Clave:</h4>
-          <ul>
-              <li>✅ Código fuente disponible</li>
-              <li>✅ Libertad de modificación</li>
-              <li>✅ Redistribución permitida</li>
-              <li>✅ Sin restricciones de uso</li>
-              <li>✅ Comunidad colaborativa</li>
-          </ul>
-      </div>
-      """, unsafe_allow_html=True)
-  
-  with col2:
-      st.markdown("""
-      <div class="software-card privado-card">
-          <h3>💰 Software Privado</h3>
-          <p><strong>Definición:</strong> Software donde el propietario mantiene control exclusivo sobre el código, distribución y modificación.</p>
-          <h4>🔑 Características Clave:</h4>
-          <ul>
-              <li>🔒 Código fuente cerrado</li>
-              <li>🔒 Control del fabricante</li>
-              <li>🔒 Licencias restrictivas</li>
-              <li>🔒 Soporte comercial</li>
-              <li>🔒 Modelo de negocio tradicional</li>
-          </ul>
-      </div>
-      """, unsafe_allow_html=True)
-  
-  # Métricas generales
-  st.markdown("## 📊 Panorama General")
-  
-  metric_cols = st.columns(4)
-  with metric_cols[0]:
-      st.markdown("""
-      <div class="metric-card">
-          <h3>🌍</h3>
-          <h4>Adopción Global</h4>
-          <p>70% servidores web usan software libre</p>
-      </div>
-      """, unsafe_allow_html=True)
-  
-  with metric_cols[1]:
-      st.markdown("""
-      <div class="metric-card">
-          <h3>💰</h3>
-          <h4>Ahorro Estimado</h4>
-          <p>$60B anuales en licencias</p>
-      </div>
-      """, unsafe_allow_html=True)
-  
-  with metric_cols[2]:
-      st.markdown("""
-      <div class="metric-card">
-          <h3>👥</h3>
-          <h4>Desarrolladores</h4>
-          <p>31M contribuyentes GitHub</p>
-      </div>
-      """, unsafe_allow_html=True)
-  
-  with metric_cols[3]:
-      st.markdown("""
-      <div class="metric-card">
-          <h3>🚀</h3>
-          <h4>Proyectos Activos</h4>
-          <p>200M+ repositorios</p>
-      </div>
-      """, unsafe_allow_html=True)
-  
-  # Timeline histórico
-  st.markdown("## 📅 Historia del Software Libre")
-  
-  timeline_data = [
-      {"año": 1983, "evento": "Richard Stallman inicia el Proyecto GNU", "tipo": "libre"},
-      {"año": 1991, "evento": "Linus Torvalds crea Linux", "tipo": "libre"},
-      {"año": 1998, "evento": "Se acuña el término 'Open Source'", "tipo": "libre"},
-      {"año": 2004, "evento": "Ubuntu democratiza Linux", "tipo": "libre"},
-      {"año": 1975, "evento": "Microsoft fundada - modelo propietario", "tipo": "privado"},
-      {"año": 1984, "evento": "Apple Macintosh - interfaz propietaria", "tipo": "privado"},
-      {"año": 2001, "evento": "Windows XP - dominancia del escritorio", "tipo": "privado"}
-  ]
-  
-  for item in sorted(timeline_data, key=lambda x: x["año"]):
-      color = "#28a745" if item["tipo"] == "libre" else "#dc3545"
-      st.markdown(f"""
-      <div class="timeline-item" style="border-left-color: {color};">
-          <strong>{item['año']}</strong> - {item['evento']}
-      </div>
-      """, unsafe_allow_html=True)
-
-# Sección: Comparación Detallada
-elif seccion == "📊 Comparación Detallada":
-  st.markdown("## 📊 Comparación Detallada")
-  
-  # Tabla comparativa interactiva
-  aspectos = [
-      "💰 Costo Inicial", "🔍 Código Fuente", "🔧 Personalización", 
-      "🛠️ Soporte Técnico", "🔒 Seguridad", "📈 Actualizaciones",
-      "🌍 Distribución", "📚 Documentación", "👥 Comunidad",
-      "🎯 Facilidad de Uso", "🔄 Compatibilidad", "⚡ Rendimiento"
-  ]
-  
-  libre_scores = [9, 10, 10, 7, 9, 8, 10, 7, 10, 6, 7, 8]
-  privado_scores = [3, 2, 3, 9, 7, 6, 4, 9, 5, 9, 8, 8]
-  
-  # Mostrar comparación con barras CSS
-  st.markdown("### 📊 Comparación Visual por Aspectos")
-  
-  for i, aspecto in enumerate(aspectos):
-      libre_score = libre_scores[i]
-      privado_score = privado_scores[i]
-      
-      st.markdown(f"**{aspecto}**")
-      
-      col1, col2 = st.columns(2)
-      
-      with col1:
-          st.markdown("Software Libre")
-          libre_width = (libre_score / 10) * 100
-          st.markdown(f"""
-          <div class="comparison-bar">
-              <div class="bar-fill-libre" style="width: {libre_width}%"></div>
-          </div>
-          <small>{libre_score}/10</small>
-          """, unsafe_allow_html=True)
-      
-      with col2:
-          st.markdown("Software Privado")
-          privado_width = (privado_score / 10) * 100
-          st.markdown(f"""
-          <div class="comparison-bar">
-              <div class="bar-fill-privado" style="width: {privado_width}%"></div>
-          </div>
-          <small>{privado_score}/10</small>
-          """, unsafe_allow_html=True)
-
-# Sección: Ejemplos Prácticos
-elif seccion == "💡 Ejemplos Prácticos":
-  st.markdown("## 💡 Ejemplos Prácticos por Categoría")
+# Sección: Catálogo de Ejemplos
+if seccion == "🏠 Catálogo de Ejemplos":
+  st.markdown("## 📋 Catálogo Completo de Ejemplos")
   
   # Selector de categoría
-  categoria = st.selectbox(
+  categoria_seleccionada = st.selectbox(
       "Selecciona una categoría:",
-      list(SOFTWARE_LIBRE.keys())
+      list(EJEMPLOS_SOFTWARE.keys())
   )
   
-  if categoria:
+  if categoria_seleccionada:
       col1, col2 = st.columns(2)
       
+      # Software Libre
       with col1:
           st.markdown(f"""
           <div class="software-card libre-card">
-              <h3>🆓 Software Libre - {categoria}</h3>
+              <h3>🆓 Software Libre - {categoria_seleccionada}</h3>
           </div>
           """, unsafe_allow_html=True)
           
-          for software in SOFTWARE_LIBRE[categoria]:
-              if st.button(f"ℹ️ {software}", key=f"libre_{software}"):
-                  st.session_state.current_comparison = {
-                      'software': software,
-                      'tipo': 'libre',
-                      'categoria': categoria
-                  }
+          for software in EJEMPLOS_SOFTWARE[categoria_seleccionada]["libre"]:
+              with st.expander(f"📱 {software['nombre']} ({software['año']})"):
+                  st.write(f"**Descripción:** {software['descripcion']}")
+                  st.write(f"**Licencia:** {software['licencia']}")
+                  st.write(f"**Desarrollador:** {software['desarrollador']}")
+                  st.write(f"**Uso Principal:** {software['uso_principal']}")
+                  
+                  col_v, col_d = st.columns(2)
+                  with col_v:
+                      st.write("**✅ Ventajas:**")
+                      for ventaja in software['ventajas']:
+                          st.write(f"• {ventaja}")
+                  
+                  with col_d:
+                      st.write("**❌ Desventajas:**")
+                      for desventaja in software['desventajas']:
+                          st.write(f"• {desventaja}")
       
+      # Software Privado
       with col2:
           st.markdown(f"""
           <div class="software-card privado-card">
-              <h3>💰 Software Privado - {categoria}</h3>
+              <h3>💰 Software Privado - {categoria_seleccionada}</h3>
           </div>
           """, unsafe_allow_html=True)
           
-          for software in SOFTWARE_PRIVADO[categoria]:
-              if st.button(f"ℹ️ {software}", key=f"privado_{software}"):
-                  st.session_state.current_comparison = {
-                      'software': software,
-                      'tipo': 'privado',
-                      'categoria': categoria
-                  }
+          for software in EJEMPLOS_SOFTWARE[categoria_seleccionada]["privado"]:
+              with st.expander(f"💼 {software['nombre']} ({software['año']})"):
+                  st.write(f"**Descripción:** {software['descripcion']}")
+                  st.write(f"**Licencia:** {software['licencia']}")
+                  st.write(f"**Desarrollador:** {software['desarrollador']}")
+                  st.write(f"**Uso Principal:** {software['uso_principal']}")
+                  
+                  col_v, col_d = st.columns(2)
+                  with col_v:
+                      st.write("**✅ Ventajas:**")
+                      for ventaja in software['ventajas']:
+                          st.write(f"• {ventaja}")
+                  
+                  with col_d:
+                      st.write("**❌ Desventajas:**")
+                      for desventaja in software['desventajas']:
+                          st.write(f"• {desventaja}")
 
-# Sección: Análisis de Costos
-elif seccion == "📈 Análisis de Costos":
-  st.markdown("## 📈 Análisis de Costos")
-  
-  # Calculadora de costos
-  st.markdown("### 💰 Calculadora de Costos")
+# Sección: Comparador de Software
+elif seccion == "🔍 Comparador de Software":
+  st.markdown("## 🔍 Comparador de Software")
   
   col1, col2 = st.columns(2)
   
   with col1:
-      st.markdown("#### Configuración")
-      num_usuarios = st.number_input("Número de usuarios", 1, 1000, 50)
-      años = st.slider("Período (años)", 1, 10, 5)
-      incluir_soporte = st.checkbox("Incluir soporte técnico")
-      incluir_capacitacion = st.checkbox("Incluir capacitación")
-      incluir_migracion = st.checkbox("Incluir costos de migración")
+      st.markdown("### Selecciona Software Libre")
+      categoria_libre = st.selectbox("Categoría:", list(EJEMPLOS_SOFTWARE.keys()), key="cat_libre")
+      software_libre_opciones = [s['nombre'] for s in EJEMPLOS_SOFTWARE[categoria_libre]["libre"]]
+      software_libre_sel = st.selectbox("Software:", software_libre_opciones, key="soft_libre")
   
   with col2:
-      # Costos estimados
-      costo_licencia_office = 150  # USD por usuario por año
-      costo_licencia_windows = 200  # USD por usuario (una vez)
-      costo_soporte = 50  # USD por usuario por año
-      costo_capacitacion = 100  # USD por usuario (una vez)
-      costo_migracion = 75  # USD por usuario (una vez)
-      
-      # Cálculos para software privado
-      costo_privado = (
-          (costo_licencia_office * años * num_usuarios) +
-          (costo_licencia_windows * num_usuarios) +
-          (costo_soporte * años * num_usuarios if incluir_soporte else 0) +
-          (costo_capacitacion * num_usuarios if incluir_capacitacion else 0) +
-          (costo_migracion * num_usuarios if incluir_migracion else 0)
-      )
-      
-      # Cálculos para software libre
-      costo_libre = (
-          (costo_soporte * 0.4 * años * num_usuarios if incluir_soporte else 0) +
-          (costo_capacitacion * 0.6 * num_usuarios if incluir_capacitacion else 0) +
-          (costo_migracion * 1.2 * num_usuarios if incluir_migracion else 0)
-      )
-      
-      ahorro = costo_privado - costo_libre
-      
-      st.markdown("#### Resultados")
-      st.metric("Costo Software Privado", f"${costo_privado:,.2f}")
-      st.metric("Costo Software Libre", f"${costo_libre:,.2f}")
-      st.metric("Ahorro Total", f"${ahorro:,.2f}", 
-               delta=f"{(ahorro/costo_privado)*100:.1f}%" if costo_privado > 0 else "0%")
-
-# Sección: Quiz Interactivo
-elif seccion == "🎮 Quiz Interactivo":
-  st.markdown("## 🎮 Quiz Interactivo")
+      st.markdown("### Selecciona Software Privado")
+      categoria_privado = st.selectbox("Categoría:", list(EJEMPLOS_SOFTWARE.keys()), key="cat_privado")
+      software_privado_opciones = [s['nombre'] for s in EJEMPLOS_SOFTWARE[categoria_privado]["privado"]]
+      software_privado_sel = st.selectbox("Software:", software_privado_opciones, key="soft_privado")
   
-  # Preguntas del quiz
-  preguntas = [
-      {
-          "pregunta": "¿Cuál es la principal característica del software libre?",
-          "opciones": [
-              "Es gratuito",
-              "El código fuente está disponible",
-              "No tiene licencia",
-              "Solo funciona en Linux"
-          ],
-          "respuesta_correcta": 1,
-          "explicacion": "La principal característica del software libre es que el código fuente está disponible para ser estudiado, modificado y distribuido."
-      },
-      {
-          "pregunta": "¿Qué significa GPL?",
-          "opciones": [
-              "General Public License",
-              "GNU Private License",
-              "Global Programming Language",
-              "General Programming Library"
-          ],
-          "respuesta_correcta": 0,
-          "explicacion": "GPL significa General Public License, una licencia de software libre creada por la Free Software Foundation."
-      },
-      {
-          "pregunta": "¿Cuál de estos NO es software libre?",
-          "opciones": [
-              "Firefox",
-              "LibreOffice",
-              "Microsoft Office",
-              "GIMP"
-          ],
-          "respuesta_correcta": 2,
-          "explicacion": "Microsoft Office es software propietario, mientras que los demás son ejemplos de software libre."
-      }
-  ]
-  
-  if not st.session_state.quiz_completado:
-      if st.session_state.pregunta_actual < len(preguntas):
-          pregunta_actual = preguntas[st.session_state.pregunta_actual]
-          
-          st.markdown(f"### Pregunta {st.session_state.pregunta_actual + 1} de {len(preguntas)}")
-          st.markdown(f"**{pregunta_actual['pregunta']}**")
-          
-          respuesta = st.radio(
-              "Selecciona tu respuesta:",
-              pregunta_actual['opciones'],
-              key=f"pregunta_{st.session_state.pregunta_actual}"
-          )
-          
-          if st.button("Responder", key=f"btn_{st.session_state.pregunta_actual}"):
-              respuesta_idx = pregunta_actual['opciones'].index(respuesta)
-              st.session_state.quiz_total += 1
-              
-              if respuesta_idx == pregunta_actual['respuesta_correcta']:
-                  st.session_state.quiz_score += 1
-                  st.markdown(f"""
-                  <div class="quiz-correct">
-                      <h4>✅ ¡Correcto!</h4>
-                      <p>{pregunta_actual['explicacion']}</p>
-                  </div>
-                  """, unsafe_allow_html=True)
-              else:
-                  respuesta_correcta = pregunta_actual['opciones'][pregunta_actual['respuesta_correcta']]
-                  st.markdown(f"""
-                  <div class="quiz-incorrect">
-                      <h4>❌ Incorrecto</h4>
-                      <p><strong>Respuesta correcta:</strong> {respuesta_correcta}</p>
-                      <p>{pregunta_actual['explicacion']}</p>
-                  </div>
-                  """, unsafe_allow_html=True)
-              
-              st.session_state.pregunta_actual += 1
-              
-              if st.session_state.pregunta_actual >= len(preguntas):
-                  st.session_state.quiz_completado = True
-              
-              st.rerun()
+  if st.button("🔄 Comparar Software", type="primary"):
+      # Encontrar los software seleccionados
+      libre_data = next(s for s in EJEMPLOS_SOFTWARE[categoria_libre]["libre"] if s['nombre'] == software_libre_sel)
+      privado_data = next(s for s in EJEMPLOS_SOFTWARE[categoria_privado]["privado"] if s['nombre'] == software_privado_sel)
       
-      # Progreso del quiz
-      progress = st.session_state.pregunta_actual / len(preguntas)
-      st.progress(progress)
-      st.write(f"Progreso: {st.session_state.pregunta_actual}/{len(preguntas)}")
-  
-  else:
-      # Resultados finales
-      st.markdown("## 🎉 ¡Quiz Completado!")
+      st.markdown("---")
+      st.markdown("## 📊 Comparación Detallada")
       
-      score_percentage = (st.session_state.quiz_score / st.session_state.quiz_total) * 100
+      # Tabla comparativa
+      comparacion_df = pd.DataFrame({
+          "Aspecto": ["Nombre", "Año", "Licencia", "Desarrollador", "Uso Principal"],
+          software_libre_sel: [
+              libre_data['nombre'],
+              libre_data['año'],
+              libre_data['licencia'],
+              libre_data['desarrollador'],
+              libre_data['uso_principal']
+          ],
+          software_privado_sel: [
+              privado_data['nombre'],
+              privado_data['año'],
+              privado_data['licencia'],
+              privado_data['desarrollador'],
+              privado_data['uso_principal']
+          ]
+      })
       
-      col1, col2, col3 = st.columns(3)
+      st.dataframe(comparacion_df, use_container_width=True)
+      
+      # Comparación de ventajas y desventajas
+      col1, col2 = st.columns(2)
+      
       with col1:
-          st.metric("Respuestas Correctas", st.session_state.quiz_score)
+          st.markdown(f"### ✅ Ventajas de {software_libre_sel}")
+          for ventaja in libre_data['ventajas']:
+              st.success(f"✓ {ventaja}")
+          
+          st.markdown(f"### ❌ Desventajas de {software_libre_sel}")
+          for desventaja in libre_data['desventajas']:
+              st.error(f"✗ {desventaja}")
+      
       with col2:
-          st.metric("Total de Preguntas", st.session_state.quiz_total)
-      with col3:
-          st.metric("Puntuación", f"{score_percentage:.1f}%")
-      
-      if score_percentage >= 80:
-          st.success("🏆 ¡Excelente! Tienes un gran conocimiento sobre software libre.")
-      elif score_percentage >= 60:
-          st.info("👍 ¡Bien! Tienes conocimientos básicos, pero puedes mejorar.")
-      else:
-          st.warning("📚 Te recomendamos revisar el material nuevamente.")
-      
-      if st.button("Reiniciar Quiz"):
-          st.session_state.quiz_score = 0
-          st.session_state.quiz_total = 0
-          st.session_state.pregunta_actual = 0
-          st.session_state.quiz_completado = False
-          st.rerun()
+          st.markdown(f"### ✅ Ventajas de {software_privado_sel}")
+          for ventaja in privado_data['ventajas']:
+              st.success(f"✓ {ventaja}")
+          
+          st.markdown(f"### ❌ Desventajas de {software_privado_sel}")
+          for desventaja in privado_data['desventajas']:
+              st.error(f"✗ {desventaja}")
 
-# Sección: Casos de Estudio
-elif seccion == "📚 Casos de Estudio":
-  st.markdown("## 📚 Casos de Estudio")
+# Sección: Quiz de Ejemplos
+elif seccion == "🎮 Quiz de Ejemplos":
+  st.markdown("## 🎮 Quiz sobre Ejemplos de Software")
   
-  casos = [
-      {
-          "titulo": "🏛️ Migración del Gobierno de Munich a Linux",
-          "descripcion": "La ciudad de Munich migró 15,000 PCs de Windows a Linux, ahorrando millones en licencias.",
-          "resultados": ["Ahorro de €10+ millones", "Mayor control sobre el software", "Reducción de dependencia de proveedores"],
-          "desafios": ["Resistencia al cambio", "Capacitación del personal", "Compatibilidad con software específico"]
-      },
-      {
-          "titulo": "🏥 Sistema de Salud de Brasil",
-          "descripcion": "Brasil implementó software libre en hospitales públicos para reducir costos y mejorar la seguridad.",
-          "resultados": ["Ahorro de $100+ millones", "Mejor seguridad de datos", "Personalización para necesidades locales"],
-          "desafios": ["Capacitación médica", "Integración con sistemas existentes", "Soporte técnico"]
-      },
-      {
-          "titulo": "🎓 Universidad de Harvard",
-          "descripcion": "Harvard adoptó LibreOffice en todas sus computadoras estudiantiles.",
-          "resultados": ["Ahorro anual de $500,000", "Acceso universal para estudiantes", "Formato abierto para documentos"],
-          "desafios": ["Compatibilidad con documentos externos", "Curva de aprendizaje", "Soporte técnico"]
-      }
-  ]
-  
-  for caso in casos:
-      st.markdown(f"""
-      <div class="case-study">
-          <h3>{caso['titulo']}</h3>
-          <p>{caso['descripcion']}</p>
-          <div style="margin-top: 1rem;">
-              <strong>✅ Resultados Positivos:</strong>
-              <ul>
-                  {''.join([f'<li>{resultado}</li>' for resultado in caso['resultados']])}
-              </ul>
-              <strong>⚠️ Desafíos Enfrentados:</strong>
-              <ul>
-                  {''.join([f'<li>{desafio}</li>' for desafio in caso['desafios']])}
-              </ul>
-          </div>
+  if not st.session_state.quiz_iniciado:
+      st.markdown("""
+      <div class="quiz-card">
+          <h3>🎯 Quiz de Ejemplos de Software</h3>
+          <p>Pon a prueba tus conocimientos sobre ejemplos específicos de software libre y privado</p>
       </div>
       """, unsafe_allow_html=True)
-
-# Sección: Tendencias Futuras
-elif seccion == "🔮 Tendencias Futuras":
-  st.markdown("## 🔮 Tendencias Futuras")
-  
-  tendencias = [
-      {
-          "titulo": "🤖 Inteligencia Artificial Open Source",
-          "descripcion": "Modelos de IA como LLaMA, Stable Diffusion y otros están democratizando el acceso a la IA.",
-          "impacto": "Alto",
-          "tiempo": "2024-2026"
-      },
-      {
-          "titulo": "☁️ Cloud Computing Libre",
-          "descripcion": "Plataformas como OpenStack y Kubernetes están redefiniendo la infraestructura cloud.",
-          "impacto": "Alto",
-          "tiempo": "2024-2025"
-      },
-      {
-          "titulo": "🔐 Blockchain y Criptomonedas",
-          "descripcion": "La mayoría de proyectos blockchain son de código abierto, impulsando la innovación financiera.",
-          "impacto": "Medio",
-          "tiempo": "2024-2027"
-      },
-      {
-          "titulo": "🌐 Web3 y Descentralización",
-          "descripcion": "Protocolos abiertos están creando una internet más descentralizada y libre.",
-          "impacto": "Alto",
-          "tiempo": "2025-2030"
-      }
-  ]
-  
-  for tendencia in tendencias:
-      color = "#28a745" if tendencia["impacto"] == "Alto" else "#ffc107" if tendencia["impacto"] == "Medio" else "#6c757d"
-      st.markdown(f"""
-      <div class="trend-card">
-          <h3>{tendencia['titulo']}</h3>
-          <p>{tendencia['descripcion']}</p>
-          <div style="margin-top: 1rem;">
-              <span style="background: {color}; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">
-                  Impacto: {tendencia['impacto']}
-              </span>
-              <span style="background: #007bff; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; margin-left: 0.5rem;">
-                  Período: {tendencia['tiempo']}
-              </span>
-          </div>
-      </div>
-      """, unsafe_allow_html=True)
-  
-  st.markdown("### 📊 Predicciones para 2030")
-  
-  predicciones = {
-      "Adopción de Software Libre en Empresas": "85%",
-      "Servidores Web con Software Libre": "90%",
-      "Dispositivos IoT con Software Libre": "70%",
-      "Proyectos de IA Open Source": "60%"
-  }
-  
-  
+      
+      col1, col2 = st.columns(2)
+      
+      with col1:
+          num_preguntas = st.slider("Número de preguntas:", 3, 10, 5)
+          categoria_quiz = st.selectbox(
+              "Filtrar por categoría:",
+              ["Todas"] + list(set([p["categoria"] for p in PREGUNTAS_
