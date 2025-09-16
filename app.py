@@ -685,4 +685,4 @@ PREGUNTAS_QUIZ_PROFESIONAL = [
       "respuesta_correcta": 2,
       "explicacion": "Microsoft Office 365 tiene más de 1.2 mil millones de usuarios y es utilizado por el 85% de las empresas Fortune 500, siendo la suite ofimática más popular mundialmente.",
       "categoria": "
-  },
+
