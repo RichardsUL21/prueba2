@@ -432,18 +432,6 @@ EJEMPLOS_SOFTWARE_PROFESIONAL = {
               "uso_principal": "Navegación privada, desarrollo web, usuarios conscientes de privacidad",
               "cuota_mercado": "7.6% mundial",
               "empresas_usuarios": ["Tor Project", "DuckDuckGo", "organizaciones de privacidad"]
-          },
-          {
-              "nombre": "Chromium",
-              "descripcion": "Proyecto de código abierto que sirve como base para Google Chrome y otros navegadores",
-              "licencia": "Licencia BSD",
-              "desarrollador": "Proyecto Chromium (Google)",
-              "año": 2008,
-              "ventajas": ["Código abierto", "Base de muchos navegadores", "Rápido y eficiente", "Sin servicios propietarios de Google"],
-              "desventajas": ["Menos funciones que Chrome", "Actualizaciones manuales", "Menos soporte para usuarios finales"],
-              "uso_principal": "Base para otros navegadores, desarrollo, usuarios técnicos",
-              "cuota_mercado": "Base para 65%+ de navegadores",
-              "empresas_usuarios": ["Microsoft Edge", "Opera", "Brave"]
           }
       ],
       "privado": [
@@ -458,18 +446,6 @@ EJEMPLOS_SOFTWARE_PROFESIONAL = {
               "uso_principal": "Navegación general, aplicaciones web, integración con Google Workspace",
               "cuota_mercado": "65.1% mundial",
               "empresas_usuarios": ["Mayoría de empresas que usan Google Workspace"]
-          },
-          {
-              "nombre": "Microsoft Edge",
-              "descripcion": "Navegador moderno de Microsoft, reemplazó a Internet Explorer con motor Chromium",
-              "licencia": "Licencia Propietaria Microsoft",
-              "desarrollador": "Microsoft Corporation",
-              "año": 2015,
-              "ventajas": ["Integración con Windows", "Funciones de productividad", "Seguridad empresarial", "Eficiencia energética"],
-              "desventajas": ["Limitado principalmente a ecosistema Microsoft", "Menor extensión de mercado", "Recopilación de datos"],
-              "uso_principal": "Navegación en Windows, entornos empresariales Microsoft",
-              "cuota_mercado": "4.2% mundial",
-              "empresas_usuarios": ["Empresas con infraestructura Microsoft"]
           }
       ]
   },
@@ -486,18 +462,6 @@ EJEMPLOS_SOFTWARE_PROFESIONAL = {
               "uso_principal": "Documentos profesionales, hojas de cálculo, presentaciones",
               "cuota_mercado": "100+ millones de usuarios",
               "empresas_usuarios": ["Gobierno francés", "Gobierno italiano", "muchas universidades"]
-          },
-          {
-              "nombre": "Apache OpenOffice",
-              "descripcion": "Suite ofimática de código abierto, precursora de LibreOffice",
-              "licencia": "Apache License 2.0",
-              "desarrollador": "Apache Software Foundation",
-              "año": 2012,
-              "ventajas": ["Gratuito", "Estable", "Soporte para múltiples idiomas", "Formatos estándar abiertos"],
-              "desventajas": ["Desarrollo más lento", "Interfaz desactualizada", "Menos funciones modernas"],
-              "uso_principal": "Oficina básica, educación, organizaciones con presupuesto limitado",
-              "cuota_mercado": "Millones de descargas anuales",
-              "empresas_usuarios": ["Organizaciones educativas", "ONGs"]
           }
       ],
       "privado": [
@@ -512,18 +476,6 @@ EJEMPLOS_SOFTWARE_PROFESIONAL = {
               "uso_principal": "Oficina profesional, colaboración empresarial, productividad",
               "cuota_mercado": "1.2 mil millones de usuarios",
               "empresas_usuarios": ["85% de empresas Fortune 500"]
-          },
-          {
-              "nombre": "Google Workspace",
-              "descripcion": "Suite de productividad basada en la nube con colaboración en tiempo real",
-              "licencia": "Licencia Propietaria Google",
-              "desarrollador": "Google LLC",
-              "año": 2006,
-              "ventajas": ["Colaboración excelente", "Basado en la nube", "Integración con servicios Google", "Actualizaciones automáticas"],
-              "desventajas": ["Funciones limitadas offline", "Dependencia de Google", "Menos funciones avanzadas que Office"],
-              "uso_principal": "Colaboración en línea, startups, educación",
-              "cuota_mercado": "3 mil millones de usuarios",
-              "empresas_usuarios": ["Spotify", "Airbnb", "muchas startups"]
           }
       ]
   }
@@ -684,5 +636,71 @@ PREGUNTAS_QUIZ_PROFESIONAL = [
       ],
       "respuesta_correcta": 2,
       "explicacion": "Microsoft Office 365 tiene más de 1.2 mil millones de usuarios y es utilizado por el 85% de las empresas Fortune 500, siendo la suite ofimática más popular mundialmente.",
-      "categoria": "
+      "categoria": "Oficina",
+      "dificultad": "Básico"
+  }
+]
 
+# Inicializar session state
+if 'quiz_score' not in st.session_state:
+  st.session_state.quiz_score = 0
+if 'quiz_total' not in st.session_state:
+  st.session_state.quiz_total = 0
+if 'pregunta_actual' not in st.session_state:
+  st.session_state.pregunta_actual = 0
+if 'quiz_completado' not in st.session_state:
+  st.session_state.quiz_completado = False
+if 'quiz_iniciado' not in st.session_state:
+  st.session_state.quiz_iniciado = False
+if 'preguntas_seleccionadas' not in st.session_state:
+  st.session_state.preguntas_seleccionadas = []
+if 'respuestas_usuario' not in st.session_state:
+  st.session_state.respuestas_usuario = []
+if 'mostrar_explicacion' not in st.session_state:
+  st.session_state.mostrar_explicacion = False
+if 'respuesta_seleccionada' not in st.session_state:
+  st.session_state.respuesta_seleccionada = None
+
+# Header principal
+st.markdown("""
+<div class="main-header fade-in">
+  <h1>🎓 Quiz Profesional de Software</h1>
+  <h3>Software Libre vs Software Privado</h3>
+  <p>Pon a prueba tus conocimientos con ejemplos reales y casos de uso profesionales</p>
+</div>
+""", unsafe_allow_html=True)
+
+# Sidebar
+st.sidebar.markdown("## 🎯 Panel de Control")
+seccion = st.sidebar.selectbox(
+  "Selecciona una sección:",
+  [
+      "🏠 Catálogo de Ejemplos",
+      "🔍 Comparador Profesional",
+      "🎮 Quiz Interactivo",
+      "📊 Estadísticas y Análisis",
+      "📄 Informe APA Profesional"
+  ]
+)
+
+st.sidebar.markdown("---")
+st.sidebar.markdown("### 📈 Estadísticas del Sistema")
+
+# Calcular estadísticas
+total_libre = sum(len(categoria["libre"]) for categoria in EJEMPLOS_SOFTWARE_PROFESIONAL.values())
+total_privado = sum(len(categoria["privado"]) for categoria in EJEMPLOS_SOFTWARE_PROFESIONAL.values())
+total_categorias = len(EJEMPLOS_SOFTWARE_PROFESIONAL)
+
+st.sidebar.metric("Software Libre", total_libre, "ejemplos")
+st.sidebar.metric("Software Privado", total_privado, "ejemplos")
+st.sidebar.metric("Categorías", total_categorias, "tipos")
+st.sidebar.metric("Preguntas Quiz", len(PREGUNTAS_QUIZ_PROFESIONAL), "disponibles")
+
+if st.session_state.quiz_total > 0:
+  accuracy = (st.session_state.quiz_score / st.session_state.quiz_total) * 100
+  st.sidebar.metric("Precisión Quiz", f"{accuracy:.1f}%", f"{st.session_state.quiz_score}/{st.session_state.quiz_total}")
+
+# Función para reiniciar quiz
+def reiniciar_quiz():
+  st.session_state.quiz_score = 0
+  st.session_state.quiz_total = 0
