@@ -636,22 +636,4 @@ elif seccion == "🔍 Comparador de Software":
           for desventaja in privado_data['desventajas']:
               st.error(f"✗ {desventaja}")
 
-# Sección: Quiz de Ejemplos
-elif seccion == "🎮 Quiz de Ejemplos":
-  st.markdown("## 🎮 Quiz sobre Ejemplos de Software")
-  
-  if not st.session_state.quiz_iniciado:
-      st.markdown("""
-      <div class="quiz-card">
-          <h3>🎯 Quiz de Ejemplos de Software</h3>
-          <p>Pon a prueba tus conocimientos sobre ejemplos específicos de software libre y privado</p>
-      </div>
-      """, unsafe_allow_html=True)
-      
-      col1, col2 = st.columns(2)
-      
-      with col1:
-          num_preguntas = st.slider("Número de preguntas:", 3, 10, 5)
-          categoria_quiz = st.selectbox(
-              "Filtrar por categoría:",
-              ["Todas"] + list(set([p["categoria"] for p in PREGUNTAS_
+
