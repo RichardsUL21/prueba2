@@ -6,701 +6,685 @@ import time
 
 # Configuración de la página
 st.set_page_config(
-  page_title="🎓 Quiz Profesional: Software Libre vs Privado",
-  page_icon="🖥️",
-  layout="wide",
-  initial_sidebar_state="expanded"
+    page_title="Software Libre vs Software Privativo - Presentación",
+    page_icon="💻",
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
-# CSS profesional
+# CSS personalizado para un diseño profesional
 st.markdown("""
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-  
-  * {
-      font-family: 'Inter', sans-serif;
-  }
-  
-  .main-header {
-      text-align: center;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      padding: 3rem 2rem;
-      border-radius: 20px;
-      margin-bottom: 2rem;
-      color: white;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  }
-  
-  .main-header h1 {
-      font-size: 2.5rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-  }
-  
-  .main-header h3 {
-      font-size: 1.2rem;
-      font-weight: 400;
-      opacity: 0.9;
-      margin-bottom: 1rem;
-  }
-  
-  .professional-card {
-      background: white;
-      padding: 2rem;
-      border-radius: 15px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-      margin: 1.5rem 0;
-      border: 1px solid #e1e8ed;
-      transition: all 0.3s ease;
-  }
-  
-  .professional-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-  }
-  
-  .software-card-libre {
-      background: linear-gradient(135deg, #f8fff9 0%, #e8f5e8 100%);
-      border-left: 5px solid #28a745;
-  }
-  
-  .software-card-privado {
-      background: linear-gradient(135deg, #fff8f8 0%, #ffe8e8 100%);
-      border-left: 5px solid #dc3545;
-  }
-  
-  .quiz-container {
-      background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
-      padding: 2.5rem;
-      border-radius: 20px;
-      margin: 2rem 0;
-      border: 2px solid #4285f4;
-      box-shadow: 0 8px 25px rgba(66, 133, 244, 0.15);
-  }
-  
-  .quiz-header {
-      text-align: center;
-      margin-bottom: 2rem;
-  }
-  
-  .quiz-header h2 {
-      color: #1a73e8;
-      font-weight: 600;
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-  }
-  
-  .quiz-progress {
-      background: #f1f3f4;
-      height: 8px;
-      border-radius: 4px;
-      margin: 1rem 0;
-      overflow: hidden;
-  }
-  
-  .quiz-progress-fill {
-      background: linear-gradient(90deg, #4285f4, #34a853);
-      height: 100%;
-      border-radius: 4px;
-      transition: width 0.5s ease;
-  }
-  
-  .question-card {
-      background: white;
-      padding: 2rem;
-      border-radius: 15px;
-      margin: 1.5rem 0;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      border-left: 4px solid #4285f4;
-  }
-  
-  .question-number {
-      background: #4285f4;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      display: inline-block;
-      margin-bottom: 1rem;
-  }
-  
-  .question-text {
-      font-size: 1.2rem;
-      font-weight: 500;
-      color: #202124;
-      margin-bottom: 1.5rem;
-      line-height: 1.5;
-  }
-  
-  .option-button {
-      background: white;
-      border: 2px solid #e8eaed;
-      padding: 1rem 1.5rem;
-      border-radius: 10px;
-      margin: 0.5rem 0;
-      width: 100%;
-      text-align: left;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-size: 1rem;
-      color: #3c4043;
-  }
-  
-  .option-button:hover {
-      border-color: #4285f4;
-      background: #f8f9ff;
-      transform: translateX(5px);
-  }
-  
-  .option-correct {
-      background: #e8f5e8 !important;
-      border-color: #34a853 !important;
-      color: #137333 !important;
-      font-weight: 500;
-  }
-  
-  .option-incorrect {
-      background: #fce8e6 !important;
-      border-color: #ea4335 !important;
-      color: #d33b2c !important;
-  }
-  
-  .explanation-box {
-      background: #f8f9fa;
-      border-left: 4px solid #34a853;
-      padding: 1.5rem;
-      border-radius: 8px;
-      margin: 1rem 0;
-      font-style: italic;
-      color: #5f6368;
-  }
-  
-  .stats-container {
-      display: flex;
-      justify-content: space-around;
-      background: white;
-      padding: 2rem;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      margin: 2rem 0;
-  }
-  
-  .stat-item {
-      text-align: center;
-  }
-  
-  .stat-number {
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: #1a73e8;
-      display: block;
-  }
-  
-  .stat-label {
-      font-size: 0.9rem;
-      color: #5f6368;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-  }
-  
-  .results-container {
-      background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-      padding: 2.5rem;
-      border-radius: 20px;
-      text-align: center;
-      margin: 2rem 0;
-      border: 2px solid #ff9800;
-  }
-  
-  .results-score {
-      font-size: 4rem;
-      font-weight: 700;
-      color: #e65100;
-      margin-bottom: 1rem;
-  }
-  
-  .results-message {
-      font-size: 1.3rem;
-      color: #bf360c;
-      font-weight: 500;
-      margin-bottom: 2rem;
-  }
-  
-  .category-badge {
-      background: #e3f2fd;
-      color: #1976d2;
-      padding: 0.3rem 0.8rem;
-      border-radius: 15px;
-      font-size: 0.8rem;
-      font-weight: 500;
-      display: inline-block;
-      margin-bottom: 1rem;
-  }
-  
-  .software-example {
-      background: #f8f9fa;
-      padding: 1.5rem;
-      border-radius: 10px;
-      margin: 1rem 0;
-      border-left: 3px solid #4285f4;
-  }
-  
-  .software-name {
-      font-weight: 600;
-      color: #1a73e8;
-      font-size: 1.1rem;
-      margin-bottom: 0.5rem;
-  }
-  
-  .software-description {
-      color: #5f6368;
-      margin-bottom: 1rem;
-      line-height: 1.5;
-  }
-  
-  .software-details {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      font-size: 0.9rem;
-  }
-  
-  .detail-item {
-      color: #3c4043;
-  }
-  
-  .detail-label {
-      font-weight: 500;
-      color: #1a73e8;
-  }
-  
-  .comparison-table {
-      background: white;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      margin: 2rem 0;
-  }
-  
-  .table-header {
-      background: #4285f4;
-      color: white;
-      padding: 1rem;
-      font-weight: 600;
-  }
-  
-  .table-row {
-      padding: 1rem;
-      border-bottom: 1px solid #e8eaed;
-  }
-  
-  .table-row:nth-child(even) {
-      background: #f8f9fa;
-  }
-  
-  .btn-primary {
-      background: linear-gradient(135deg, #4285f4 0%, #1a73e8 100%);
-      color: white;
-      border: none;
-      padding: 1rem 2rem;
-      border-radius: 25px;
-      font-weight: 600;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(66, 133, 244, 0.3);
-  }
-  
-  .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(66, 133, 244, 0.4);
-  }
-  
-  .btn-secondary {
-      background: white;
-      color: #4285f4;
-      border: 2px solid #4285f4;
-      padding: 1rem 2rem;
-      border-radius: 25px;
-      font-weight: 600;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-  }
-  
-  .btn-secondary:hover {
-      background: #4285f4;
-      color: white;
-  }
-  
-  @keyframes fadeInUp {
-      from {
-          opacity: 0;
-          transform: translateY(30px);
-      }
-      to {
-          opacity: 1;
-          transform: translateY(0);
-      }
-  }
-  
-  .fade-in {
-      animation: fadeInUp 0.6s ease-out;
-  }
-  
-  @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-  }
-  
-  .pulse {
-      animation: pulse 2s infinite;
-  }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    .main {
+        font-family: 'Inter', sans-serif;
+    }
+    
+    .slide-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 3rem;
+        border-radius: 20px;
+        margin-bottom: 2rem;
+        color: white;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        min-height: 500px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    .slide-title {
+        font-size: 3rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 2rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .slide-subtitle {
+        font-size: 1.5rem;
+        font-weight: 400;
+        text-align: center;
+        margin-bottom: 3rem;
+        opacity: 0.9;
+    }
+    
+    .slide-content {
+        font-size: 1.2rem;
+        line-height: 1.8;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .example-card {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 2rem;
+        border-radius: 15px;
+        margin: 1rem 0;
+        color: #333;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+    
+    .example-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .libre-card {
+        border-left: 5px solid #28a745;
+    }
+    
+    .privativo-card {
+        border-left: 5px solid #dc3545;
+    }
+    
+    .software-name {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 0.5rem;
+    }
+    
+    .software-description {
+        color: #666;
+        margin-bottom: 1rem;
+    }
+    
+    .comparison-table {
+        background: white;
+        border-radius: 10px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        margin: 2rem 0;
+    }
+    
+    .quiz-container {
+        background: #f8f9fa;
+        padding: 2rem;
+        border-radius: 15px;
+        margin: 2rem 0;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .quiz-question {
+        font-size: 1.3rem;
+        font-weight: 500;
+        margin-bottom: 1.5rem;
+        color: #333;
+    }
+    
+    .correct-answer {
+        background-color: #d4edda !important;
+        border-color: #c3e6cb !important;
+        color: #155724 !important;
+    }
+    
+    .incorrect-answer {
+        background-color: #f8d7da !important;
+        border-color: #f5c6cb !important;
+        color: #721c24 !important;
+    }
+    
+    .navigation-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+    
+    .nav-button {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 0.75rem 2rem;
+        border-radius: 25px;
+        border: 2px solid white;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-button:hover {
+        background: white;
+        color: #764ba2;
+    }
+    
+    .feature-list {
+        list-style: none;
+        padding: 0;
+    }
+    
+    .feature-list li {
+        padding: 0.5rem 0;
+        display: flex;
+        align-items: center;
+    }
+    
+    .feature-list li:before {
+        content: "✓";
+        color: #28a745;
+        font-weight: bold;
+        margin-right: 1rem;
+        font-size: 1.2rem;
+    }
+    
+    .stats-container {
+        display: flex;
+        justify-content: space-around;
+        margin: 2rem 0;
+        text-align: center;
+    }
+    
+    .stat-item {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 1.5rem;
+        border-radius: 10px;
+        min-width: 150px;
+    }
+    
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+        font-size: 0.9rem;
+        opacity: 0.8;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
 </style>
 """, unsafe_allow_html=True)
 
-# Base de datos profesional de ejemplos de software
-EJEMPLOS_SOFTWARE_PROFESIONAL = {
-  "Sistemas Operativos": {
-      "libre": [
-          {
-              "nombre": "Ubuntu Linux",
-              "descripcion": "Distribución de Linux más popular para escritorio, conocida por su facilidad de uso y amplio soporte comunitario",
-              "licencia": "GPL v3 + Licencias adicionales",
-              "desarrollador": "Canonical Ltd.",
-              "año": 2004,
-              "ventajas": ["Completamente gratuito", "Altamente seguro", "Personalizable", "Gran comunidad de soporte", "Actualizaciones regulares"],
-              "desventajas": ["Curva de aprendizaje inicial", "Compatibilidad limitada con algunos juegos", "Menos software comercial disponible"],
-              "uso_principal": "Escritorio personal, desarrollo de software, servidores web",
-              "cuota_mercado": "2.6% escritorio mundial",
-              "empresas_usuarios": ["Netflix", "Tesla", "SpaceX"]
-          },
-          {
-              "nombre": "Debian GNU/Linux",
-              "descripcion": "Sistema operativo universal conocido por su estabilidad y filosofía de software completamente libre",
-              "licencia": "DFSG (Debian Free Software Guidelines)",
-              "desarrollador": "Proyecto Debian",
-              "año": 1993,
-              "ventajas": ["Extremadamente estable", "Amplio repositorio de software", "Seguridad robusta", "Arquitecturas múltiples"],
-              "desventajas": ["Ciclos de actualización lentos", "Configuración más técnica", "Software menos actualizado"],
-              "uso_principal": "Servidores críticos, sistemas embebidos, base para otras distribuciones",
-              "cuota_mercado": "Base para Ubuntu y 100+ distribuciones",
-              "empresas_usuarios": ["Google", "NASA", "CERN"]
-          }
-      ],
-      "privado": [
-          {
-              "nombre": "Microsoft Windows 11",
-              "descripcion": "Sistema operativo más utilizado en escritorios, con interfaz moderna y integración con servicios Microsoft",
-              "licencia": "Licencia Propietaria Microsoft",
-              "desarrollador": "Microsoft Corporation",
-              "año": 2021,
-              "ventajas": ["Interfaz familiar", "Amplia compatibilidad de software", "Soporte técnico oficial", "Integración con Office 365"],
-              "desventajas": ["Costo de licencia elevado", "Recopilación de datos telemetría", "Actualizaciones forzadas", "Vulnerabilidades frecuentes"],
-              "uso_principal": "Escritorio empresarial, gaming, aplicaciones de oficina",
-              "cuota_mercado": "73% del mercado de escritorio",
-              "empresas_usuarios": ["La mayoría de empresas Fortune 500"]
-          },
-          {
-              "nombre": "Apple macOS",
-              "descripcion": "Sistema operativo exclusivo de Apple, conocido por su diseño elegante y integración con el ecosistema Apple",
-              "licencia": "Licencia Propietaria Apple",
-              "desarrollador": "Apple Inc.",
-              "año": 2001,
-              "ventajas": ["Diseño elegante y intuitivo", "Integración perfecta con dispositivos Apple", "Excelente para creativos", "Seguridad avanzada"],
-              "desventajas": ["Limitado a hardware Apple", "Costo muy elevado", "Menos personalizable", "Dependencia del ecosistema Apple"],
-              "uso_principal": "Diseño gráfico, desarrollo iOS, producción multimedia",
-              "cuota_mercado": "15.6% del mercado de escritorio",
-              "empresas_usuarios": ["Pixar", "Adobe", "muchas agencias creativas"]
-          }
-      ]
-  },
-  "Navegadores Web": {
-      "libre": [
-          {
-              "nombre": "Mozilla Firefox",
-              "descripcion": "Navegador web enfocado en privacidad y personalización, desarrollado por una organización sin fines de lucro",
-              "licencia": "Mozilla Public License 2.0",
-              "desarrollador": "Mozilla Foundation",
-              "año": 2004,
-              "ventajas": ["Privacidad por defecto", "Extensiones potentes", "Código abierto auditable", "No rastrea usuarios"],
-              "desventajas": ["Menor cuota de mercado", "Algunos sitios optimizados para Chrome", "Consumo de memoria variable"],
-              "uso_principal": "Navegación privada, desarrollo web, usuarios conscientes de privacidad",
-              "cuota_mercado": "7.6% mundial",
-              "empresas_usuarios": ["Tor Project", "DuckDuckGo", "organizaciones de privacidad"]
-          }
-      ],
-      "privado": [
-          {
-              "nombre": "Google Chrome",
-              "descripcion": "Navegador web más popular del mundo, desarrollado por Google con integración completa de servicios Google",
-              "licencia": "Licencia Propietaria Google",
-              "desarrollador": "Google LLC",
-              "año": 2008,
-              "ventajas": ["Velocidad excepcional", "Sincronización entre dispositivos", "Amplia compatibilidad web", "Actualizaciones automáticas"],
-              "desventajas": ["Recopilación extensiva de datos", "Alto consumo de memoria", "Dependencia de servicios Google"],
-              "uso_principal": "Navegación general, aplicaciones web, integración con Google Workspace",
-              "cuota_mercado": "65.1% mundial",
-              "empresas_usuarios": ["Mayoría de empresas que usan Google Workspace"]
-          }
-      ]
-  },
-  "Suites Ofimáticas": {
-      "libre": [
-          {
-              "nombre": "LibreOffice",
-              "descripcion": "Suite ofimática completa y profesional, compatible con formatos Microsoft Office",
-              "licencia": "Mozilla Public License 2.0",
-              "desarrollador": "The Document Foundation",
-              "año": 2011,
-              "ventajas": ["Completamente gratuito", "Compatible con formatos MS Office", "Multiplataforma", "Sin suscripciones"],
-              "desventajas": ["Interfaz menos moderna", "Funciones colaborativas limitadas", "Curva de aprendizaje para usuarios de Office"],
-              "uso_principal": "Documentos profesionales, hojas de cálculo, presentaciones",
-              "cuota_mercado": "100+ millones de usuarios",
-              "empresas_usuarios": ["Gobierno francés", "Gobierno italiano", "muchas universidades"]
-          }
-      ],
-      "privado": [
-          {
-              "nombre": "Microsoft Office 365",
-              "descripcion": "Suite ofimática líder mundial con servicios en la nube y colaboración avanzada",
-              "licencia": "Licencia Propietaria Microsoft",
-              "desarrollador": "Microsoft Corporation",
-              "año": 1990,
-              "ventajas": ["Funciones avanzadas", "Colaboración en tiempo real", "Integración cloud", "Soporte profesional"],
-              "desventajas": ["Costo elevado de suscripción", "Dependencia de internet", "Recopilación de datos"],
-              "uso_principal": "Oficina profesional, colaboración empresarial, productividad",
-              "cuota_mercado": "1.2 mil millones de usuarios",
-              "empresas_usuarios": ["85% de empresas Fortune 500"]
-          }
-      ]
-  }
+# Datos de ejemplos de software
+EJEMPLOS_SOFTWARE = {
+    "libre": [
+        {
+            "nombre": "Linux",
+            "descripcion": "Sistema operativo de código abierto",
+            "categoria": "Sistema Operativo",
+            "ventajas": ["Gratuito", "Personalizable", "Seguro", "Gran comunidad"],
+            "ejemplos_distros": ["Ubuntu", "Debian", "Fedora", "Arch Linux"]
+        },
+        {
+            "nombre": "LibreOffice",
+            "descripcion": "Suite ofimática completa",
+            "categoria": "Productividad",
+            "ventajas": ["Compatible con MS Office", "Multiplataforma", "Sin licencias"],
+            "componentes": ["Writer", "Calc", "Impress", "Draw"]
+        },
+        {
+            "nombre": "Firefox",
+            "descripcion": "Navegador web enfocado en privacidad",
+            "categoria": "Navegador",
+            "ventajas": ["Privacidad", "Extensiones", "Código abierto", "Multiplataforma"]
+        },
+        {
+            "nombre": "GIMP",
+            "descripcion": "Editor de imágenes profesional",
+            "categoria": "Diseño Gráfico",
+            "ventajas": ["Potente", "Plugins", "Gratuito", "Profesional"]
+        },
+        {
+            "nombre": "VLC Media Player",
+            "descripcion": "Reproductor multimedia universal",
+            "categoria": "Multimedia",
+            "ventajas": ["Reproduce todo", "Sin códecs adicionales", "Ligero"]
+        }
+    ],
+    "privativo": [
+        {
+            "nombre": "Windows",
+            "descripcion": "Sistema operativo de Microsoft",
+            "categoria": "Sistema Operativo",
+            "desventajas": ["Licencia costosa", "Código cerrado", "Vulnerabilidades"],
+            "versiones": ["Windows 10", "Windows 11"]
+        },
+        {
+            "nombre": "Microsoft Office",
+            "descripcion": "Suite ofimática líder del mercado",
+            "categoria": "Productividad",
+            "desventajas": ["Suscripción mensual", "Dependencia del proveedor"],
+            "componentes": ["Word", "Excel", "PowerPoint", "Outlook"]
+        },
+        {
+            "nombre": "Adobe Photoshop",
+            "descripcion": "Editor de imágenes profesional",
+            "categoria": "Diseño Gráfico",
+            "desventajas": ["Muy costoso", "Suscripción obligatoria", "Pesado"]
+        },
+        {
+            "nombre": "Google Chrome",
+            "descripcion": "Navegador web de Google",
+            "categoria": "Navegador",
+            "desventajas": ["Recopila datos", "Consume mucha RAM", "Privacidad limitada"]
+        },
+        {
+            "nombre": "macOS",
+            "descripcion": "Sistema operativo de Apple",
+            "categoria": "Sistema Operativo",
+            "desventajas": ["Solo en hardware Apple", "Costoso", "Ecosistema cerrado"]
+        }
+    ]
 }
 
-# Preguntas profesionales del quiz
-PREGUNTAS_QUIZ_PROFESIONAL = [
-  {
-      "pregunta": "¿Cuál es la principal diferencia filosófica entre software libre y software privado?",
-      "opciones": [
-          "El software libre es siempre gratuito, el privado siempre es de pago",
-          "El software libre garantiza las cuatro libertades fundamentales del usuario",
-          "El software libre es menos seguro que el privado",
-          "El software privado tiene mejor calidad que el libre"
-      ],
-      "respuesta_correcta": 1,
-      "explicacion": "El software libre se basa en las cuatro libertades fundamentales: ejecutar, estudiar, redistribuir y mejorar el software. Esta filosofía contrasta con el software privado que restringe estas libertades.",
-      "categoria": "Fundamentos",
-      "dificultad": "Intermedio"
-  },
-  {
-      "pregunta": "¿Qué navegador web libre es conocido por su enfoque en la privacidad del usuario?",
-      "opciones": [
-          "Google Chrome",
-          "Microsoft Edge",
-          "Mozilla Firefox",
-          "Safari"
-      ],
-      "respuesta_correcta": 2,
-      "explicacion": "Mozilla Firefox es desarrollado por una organización sin fines de lucro y se enfoca en proteger la privacidad del usuario, bloqueando rastreadores por defecto y siendo completamente de código abierto.",
-      "categoria": "Navegadores",
-      "dificultad": "Básico"
-  },
-  {
-      "pregunta": "¿Cuál de estos sistemas operativos tiene la mayor cuota de mercado en escritorios?",
-      "opciones": [
-          "Ubuntu Linux",
-          "macOS",
-          "Windows 11",
-          "Debian"
-      ],
-      "respuesta_correcta": 2,
-      "explicacion": "Windows 11 (y versiones anteriores de Windows) mantiene aproximadamente el 73% de la cuota de mercado en escritorios a nivel mundial, siendo el sistema operativo más utilizado.",
-      "categoria": "Sistemas Operativos",
-      "dificultad": "Básico"
-  },
-  {
-      "pregunta": "¿Qué suite ofimática libre es más compatible con los formatos de Microsoft Office?",
-      "opciones": [
-          "Apache OpenOffice",
-          "LibreOffice",
-          "Google Docs",
-          "WPS Office"
-      ],
-      "respuesta_correcta": 1,
-      "explicacion": "LibreOffice ofrece la mejor compatibilidad con formatos de Microsoft Office (.docx, .xlsx, .pptx) entre las suites ofimáticas libres, y se actualiza constantemente para mantener esta compatibilidad.",
-      "categoria": "Oficina",
-      "dificultad": "Intermedio"
-  },
-  {
-      "pregunta": "¿Cuál es una ventaja clave del software libre en términos de seguridad?",
-      "opciones": [
-          "Nunca tiene vulnerabilidades",
-          "El código puede ser auditado por cualquier persona",
-          "Solo lo usan expertos en seguridad",
-          "Las empresas no lo atacan"
-      ],
-      "respuesta_correcta": 1,
-      "explicacion": "La transparencia del código fuente permite que investigadores de seguridad, desarrolladores y usuarios auditen el código, identifiquen vulnerabilidades y contribuyan a su corrección rápidamente.",
-      "categoria": "Seguridad",
-      "dificultad": "Intermedio"
-  },
-  {
-      "pregunta": "¿Qué modelo de negocio es más común en las empresas de software libre?",
-      "opciones": [
-          "Venta de licencias de uso",
-          "Publicidad integrada en el software",
-          "Servicios de soporte, consultoría y personalización",
-          "Suscripciones mensuales obligatorias"
-      ],
-      "respuesta_correcta": 2,
-      "explicacion": "Las empresas de software libre generalmente monetizan a través de servicios profesionales como soporte técnico, consultoría, implementación, capacitación y desarrollo personalizado.",
-      "categoria": "Modelos de Negocio",
-      "dificultad": "Avanzado"
-  },
-  {
-      "pregunta": "¿Cuál de estas distribuciones Linux es conocida por su extrema estabilidad en servidores?",
-      "opciones": [
-          "Ubuntu",
-          "Fedora",
-          "Debian",
-          "Arch Linux"
-      ],
-      "respuesta_correcta": 2,
-      "explicacion": "Debian es reconocida por su estabilidad excepcional, con ciclos de prueba exhaustivos y actualizaciones conservadoras, siendo la elección preferida para servidores críticos y sistemas de producción.",
-      "categoria": "Sistemas Operativos",
-      "dificultad": "Intermedio"
-  },
-  {
-      "pregunta": "¿Qué porcentaje aproximado del mercado de navegadores web tiene Google Chrome?",
-      "opciones": [
-          "45%",
-          "55%",
-          "65%",
-          "75%"
-      ],
-      "respuesta_correcta": 2,
-      "explicacion": "Google Chrome mantiene aproximadamente el 65% de la cuota de mercado mundial de navegadores web, siendo el navegador más utilizado en la mayoría de plataformas.",
-      "categoria": "Navegadores",
-      "dificultad": "Avanzado"
-  },
-  {
-      "pregunta": "¿Cuál es la principal desventaja del software libre para usuarios no técnicos?",
-      "opciones": [
-          "Es muy caro",
-          "No se puede modificar",
-          "Puede tener una curva de aprendizaje más pronunciada",
-          "No funciona en computadoras modernas"
-      ],
-      "respuesta_correcta": 2,
-      "explicacion": "El software libre a menudo requiere más conocimientos técnicos para instalación, configuración y uso optimal, lo que puede representar un desafío para usuarios menos experimentados.",
-      "categoria": "Usabilidad",
-      "dificultad": "Básico"
-  },
-  {
-      "pregunta": "¿Qué empresas importantes utilizan Ubuntu Linux en su infraestructura?",
-      "opciones": [
-          "Solo pequeñas startups",
-          "Netflix, Tesla y SpaceX",
-          "Únicamente universidades",
-          "Solo servidores web básicos"
-      ],
-      "respuesta_correcta": 1,
-      "explicacion": "Grandes empresas tecnológicas como Netflix, Tesla y SpaceX utilizan Ubuntu Linux en su infraestructura crítica, demostrando su confiabilidad y escalabilidad empresarial.",
-      "categoria": "Casos de Uso",
-      "dificultad": "Avanzado"
-  },
-  {
-      "pregunta": "¿Cuál es la licencia más común para el software libre?",
-      "opciones": [
-          "MIT License",
-          "GPL (General Public License)",
-          "Apache License",
-          "BSD License"
-      ],
-      "respuesta_correcta": 1,
-      "explicacion": "La GPL (General Public License) es la licencia de software libre más utilizada, especialmente la GPL v3, que garantiza que el software y sus derivados permanezcan libres.",
-      "categoria": "Licencias",
-      "dificultad": "Intermedio"
-  },
-  {
-      "pregunta": "¿Qué suite ofimática tiene más usuarios a nivel mundial?",
-      "opciones": [
-          "LibreOffice",
-          "Google Workspace",
-          "Microsoft Office 365",
-          "Apache OpenOffice"
-      ],
-      "respuesta_correcta": 2,
-      "explicacion": "Microsoft Office 365 tiene más de 1.2 mil millones de usuarios y es utilizado por el 85% de las empresas Fortune 500, siendo la suite ofimática más popular mundialmente.",
-      "categoria": "Oficina",
-      "dificultad": "Básico"
-  }
+# Preguntas del quiz
+QUIZ_QUESTIONS = [
+    {
+        "pregunta": "¿Cuál es la principal diferencia entre software libre y privativo?",
+        "opciones": [
+            "El precio",
+            "La libertad de modificar y distribuir el código",
+            "La calidad del software",
+            "El soporte técnico"
+        ],
+        "respuesta_correcta": 1,
+        "explicacion": "El software libre permite a los usuarios ejecutar, copiar, distribuir, estudiar, modificar y mejorar el software."
+    },
+    {
+        "pregunta": "¿Cuál de estos es un ejemplo de software libre?",
+        "opciones": [
+            "Microsoft Windows",
+            "Adobe Photoshop",
+            "LibreOffice",
+            "macOS"
+        ],
+        "respuesta_correcta": 2,
+        "explicacion": "LibreOffice es una suite ofimática de código abierto y software libre."
+    },
+    {
+        "pregunta": "¿Qué ventaja principal ofrece el software libre?",
+        "opciones": [
+            "Siempre es más rápido",
+            "Libertad de uso y modificación",
+            "Mejor interfaz gráfica",
+            "Más publicidad"
+        ],
+        "respuesta_correcta": 1,
+        "explicacion": "El software libre ofrece libertad completa para usar, estudiar, modificar y distribuir el software."
+    },
+    {
+        "pregunta": "¿Cuál es una desventaja común del software privativo?",
+        "opciones": [
+            "Es gratuito",
+            "Código abierto",
+            "Dependencia del proveedor",
+            "Demasiadas actualizaciones gratuitas"
+        ],
+        "respuesta_correcta": 2,
+        "explicacion": "El software privativo crea dependencia del proveedor y no permite modificaciones del código."
+    },
+    {
+        "pregunta": "¿Qué sistema operativo es software libre?",
+        "opciones": [
+            "Windows 11",
+            "macOS Ventura",
+            "Ubuntu Linux",
+            "iOS"
+        ],
+        "respuesta_correcta": 2,
+        "explicacion": "Ubuntu es una distribución de Linux, que es software libre y de código abierto."
+    }
 ]
 
-# Inicializar session state
+# Inicializar estado de la sesión
+if 'slide_number' not in st.session_state:
+    st.session_state.slide_number = 0
 if 'quiz_score' not in st.session_state:
-  st.session_state.quiz_score = 0
-if 'quiz_total' not in st.session_state:
-  st.session_state.quiz_total = 0
-if 'pregunta_actual' not in st.session_state:
-  st.session_state.pregunta_actual = 0
-if 'quiz_completado' not in st.session_state:
-  st.session_state.quiz_completado = False
-if 'quiz_iniciado' not in st.session_state:
-  st.session_state.quiz_iniciado = False
-if 'preguntas_seleccionadas' not in st.session_state:
-  st.session_state.preguntas_seleccionadas = []
-if 'respuestas_usuario' not in st.session_state:
-  st.session_state.respuestas_usuario = []
-if 'mostrar_explicacion' not in st.session_state:
-  st.session_state.mostrar_explicacion = False
-if 'respuesta_seleccionada' not in st.session_state:
-  st.session_state.respuesta_seleccionada = None
+    st.session_state.quiz_score = 0
+if 'quiz_answered' not in st.session_state:
+    st.session_state.quiz_answered = False
+if 'show_quiz' not in st.session_state:
+    st.session_state.show_quiz = False
+if 'quiz_responses' not in st.session_state:
+    st.session_state.quiz_responses = {}
 
-# Header principal
-st.markdown("""
-<div class="main-header fade-in">
-  <h1>🎓 Quiz Profesional de Software</h1>
-  <h3>Software Libre vs Software Privado</h3>
-  <p>Pon a prueba tus conocimientos con ejemplos reales y casos de uso profesionales</p>
-</div>
-""", unsafe_allow_html=True)
+# Función para cambiar de diapositiva
+def change_slide(direction):
+    if direction == "next" and st.session_state.slide_number < 4:
+        st.session_state.slide_number += 1
+    elif direction == "prev" and st.session_state.slide_number > 0:
+        st.session_state.slide_number -= 1
 
-# Sidebar
-st.sidebar.markdown("## 🎯 Panel de Control")
-seccion = st.sidebar.selectbox(
-  "Selecciona una sección:",
-  [
-      "🏠 Catálogo de Ejemplos",
-      "🔍 Comparador Profesional",
-      "🎮 Quiz Interactivo",
-      "📊 Estadísticas y Análisis",
-      "📄 Informe APA Profesional"
-  ]
-)
+# Función para mostrar el quiz
+def show_quiz():
+    st.session_state.show_quiz = True
+    st.session_state.slide_number = 5
 
-st.sidebar.markdown("---")
-st.sidebar.markdown("### 📈 Estadísticas del Sistema")
+# Contenido de las diapositivas
+def render_slide(slide_num):
+    if slide_num == 0:
+        # Diapositiva 1: Título
+        st.markdown("""
+        <div class="slide-container">
+            <h1 class="slide-title">Software Libre vs Software Privativo</h1>
+            <p class="slide-subtitle">Ejemplos y Comparación Profesional</p>
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Ejemplos Libres</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Ejemplos Privativos</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">10</div>
+                    <div class="stat-label">Minutos</div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 2rem;">
+                <p style="font-size: 1.1rem; opacity: 0.8;">Estudiante 7 - 2da Ronda de Exposiciones</p>
+                <p style="opacity: 0.7;">{}</p>
+            </div>
+        </div>
+        """.format(datetime.now().strftime("%d de %B, %Y")), unsafe_allow_html=True)
+    
+    elif slide_num == 1:
+        # Diapositiva 2: Definiciones
+        st.markdown("""
+        <div class="slide-container">
+            <h2 class="slide-title">¿Qué es Software Libre y Privativo?</h2>
+            <div class="slide-content">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 3rem;">
+                    <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 15px;">
+                        <h3 style="color: #4CAF50; margin-bottom: 1rem;">🔓 Software Libre</h3>
+                        <p>Software que respeta la libertad de los usuarios y la comunidad. Los usuarios tienen la libertad de ejecutar, copiar, distribuir, estudiar, modificar y mejorar el software.</p>
+                        <ul class="feature-list" style="margin-top: 1rem;">
+                            <li>Código fuente accesible</li>
+                            <li>Libertad de modificación</li>
+                            <li>Distribución permitida</li>
+                            <li>Sin restricciones de uso</li>
+                        </ul>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 15px;">
+                        <h3 style="color: #f44336; margin-bottom: 1rem;">🔒 Software Privativo</h3>
+                        <p>Software que no es libre o de código abierto. El usuario tiene limitaciones en su uso, modificación y distribución según los términos de la licencia.</p>
+                        <ul class="feature-list" style="margin-top: 1rem;">
+                            <li style="color: #ffcccc;">❌ Código fuente oculto</li>
+                            <li style="color: #ffcccc;">❌ Modificación prohibida</li>
+                            <li style="color: #ffcccc;">❌ Distribución restringida</li>
+                            <li style="color: #ffcccc;">❌ Licencias restrictivas</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    elif slide_num == 2:
+        # Diapositiva 3: Ejemplos de Software Libre
+        st.markdown("""
+        <div class="slide-container" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+            <h2 class="slide-title">Ejemplos de Software Libre</h2>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        cols = st.columns(2)
+        for i, software in enumerate(EJEMPLOS_SOFTWARE["libre"]):
+            with cols[i % 2]:
+                st.markdown(f"""
+                <div class="example-card libre-card">
+                    <h3 class="software-name">🔓 {software['nombre']}</h3>
+                    <p class="software-description">{software['descripcion']}</p>
+                    <p><strong>Categoría:</strong> {software['categoria']}</p>
+                    <p><strong>Ventajas:</strong></p>
+                    <ul>
+                        {"".join([f"<li>{v}</li>" for v in software['ventajas']])}
+                    </ul>
+                </div>
+                """, unsafe_allow_html=True)
+    
+    elif slide_num == 3:
+        # Diapositiva 4: Ejemplos de Software Privativo
+        st.markdown("""
+        <div class="slide-container" style="background: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);">
+            <h2 class="slide-title">Ejemplos de Software Privativo</h2>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        cols = st.columns(2)
+        for i, software in enumerate(EJEMPLOS_SOFTWARE["privativo"]):
+            with cols[i % 2]:
+                st.markdown(f"""
+                <div class="example-card privativo-card">
+                    <h3 class="software-name">🔒 {software['nombre']}</h3>
+                    <p class="software-description">{software['descripcion']}</p>
+                    <p><strong>Categoría:</strong> {software['categoria']}</p>
+                    <p><strong>Consideraciones:</strong></p>
+                    <ul>
+                        {"".join([f"<li>{d}</li>" for d in software['desventajas']])}
+                    </ul>
+                </div>
+                """, unsafe_allow_html=True)
+    
+    elif slide_num == 4:
+        # Diapositiva 5: Comparación
+        st.markdown("""
+        <div class="slide-container" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <h2 class="slide-title">Comparación Directa</h2>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Crear tabla comparativa
+        comparison_data = {
+            "Característica": [
+                "Costo de Licencia",
+                "Código Fuente",
+                "Modificación",
+                "Distribución",
+                "Soporte",
+                "Seguridad",
+                "Personalización",
+                "Dependencia"
+            ],
+            "Software Libre": [
+                "✅ Generalmente gratuito",
+                "✅ Accesible y auditable",
+                "✅ Permitida y fomentada",
+                "✅ Libre distribución",
+                "⚡ Comunidad activa",
+                "✅ Transparente y auditable",
+                "✅ Total libertad",
+                "✅ Sin vendor lock-in"
+            ],
+            "Software Privativo": [
+                "❌ Pago por licencia",
+                "❌ Oculto y protegido",
+                "❌ Prohibida",
+                "❌ Restringida por licencia",
+                "💰 Soporte comercial",
+                "❓ Confianza en el proveedor",
+                "❌ Limitada o nula",
+                "❌ Dependencia del proveedor"
+            ]
+        }
+        
+        df = pd.DataFrame(comparison_data)
+        st.markdown("<div class='comparison-table'>", unsafe_allow_html=True)
+        st.table(df)
+        st.markdown("</div>", unsafe_allow_html=True)
 
-# Calcular estadísticas
-total_libre = sum(len(categoria["libre"]) for categoria in EJEMPLOS_SOFTWARE_PROFESIONAL.values())
-total_privado = sum(len(categoria["privado"]) for categoria in EJEMPLOS_SOFTWARE_PROFESIONAL.values())
-total_categorias = len(EJEMPLOS_SOFTWARE_PROFESIONAL)
+# Función principal de la aplicación
+def main():
+    # Sidebar
+    with st.sidebar:
+        st.markdown("## 📊 Panel de Control")
+        st.markdown("### Navegación de Diapositivas")
+        
+        # Mostrar progreso
+        progress = (st.session_state.slide_number + 1) / 5
+        st.progress(progress)
+        st.markdown(f"**Diapositiva {st.session_state.slide_number + 1} de 5**")
+        
+        # Botones de navegación en sidebar
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("⬅️ Anterior", use_container_width=True):
+                change_slide("prev")
+        with col2:
+            if st.button("➡️ Siguiente", use_container_width=True):
+                change_slide("next")
+        
+        st.markdown("---")
+        
+        # Índice de diapositivas
+        st.markdown("### 📑 Índice")
+        slides = [
+            "1. Portada",
+            "2. Definiciones",
+            "3. Software Libre",
+            "4. Software Privativo",
+            "5. Comparación"
+        ]
+        for i, slide in enumerate(slides):
+            if i == st.session_state.slide_number:
+                st.markdown(f"**▶️ {slide}**")
+            else:
+                if st.button(slide, key=f"nav_{i}"):
+                    st.session_state.slide_number = i
+        
+        st.markdown("---")
+        
+        # Botón para actividad complementaria
+        st.markdown("### 🎮 Actividad Complementaria")
+        if st.button("🧠 Iniciar Quiz Interactivo", type="primary", use_container_width=True):
+            show_quiz()
+        
+        # Información adicional
+        st.markdown("---")
+        st.markdown("### ℹ️ Información")
+        st.info("""
+        **Tiempo estimado:** 10 minutos
+        
+        **Objetivo:** Comprender las diferencias entre software libre y privativo mediante ejemplos reales.
+        
+        **Actividad:** Quiz interactivo al final
+        """)
+    
+    # Contenido principal
+    if not st.session_state.show_quiz:
+        # Mostrar diapositiva actual
+        render_slide(st.session_state.slide_number)
+        
+        # Botones de navegación inferior
+        st.markdown("""
+        <div class="navigation-buttons">
+        """, unsafe_allow_html=True)
+        
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col1:
+            if st.session_state.slide_number > 0:
+                if st.button("⬅️ Diapositiva Anterior"):
+                    change_slide("prev")
+        
+        with col3:
+            if st.session_state.slide_number < 4:
+                if st.button("Siguiente Diapositiva ➡️"):
+                    change_slide("next")
+            else:
+                if st.button("🎮 Ir al Quiz", type="primary"):
+                    show_quiz()
+        
+        st.markdown("</div>", unsafe_allow_html=True)
+    
+    else:
+        # Mostrar Quiz
+        st.markdown("""
+        <div class="slide-container" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            <h2 class="slide-title">🧠 Quiz Interactivo</h2>
+            <p class="slide-subtitle">Pon a prueba tus conocimientos</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Quiz
+        st.markdown("<div class='quiz-container'>", unsafe_allow_html=True)
+        
+        if not st.session_state.quiz_answered:
+            score = 0
+            
+            for i, q in enumerate(QUIZ_QUESTIONS):
+                st.markdown(f"<h3 class='quiz-question'>Pregunta {i+1}: {q['pregunta']}</h3>", 
+                           unsafe_allow_html=True)
+                
+                user_answer = st.radio(
+                    "",
+                    options=q['opciones'],
+                    key=f"q_{i}",
+                    label_visibility="collapsed"
+                )
+                
+                st.session_state.quiz_responses[i] = user_answer
+                
+                st.markdown("---")
+            
+            col1, col2, col3 = st.columns([1, 2, 1])
+            with col2:
+                if st.button("📝 Enviar Respuestas", type="primary", use_container_width=True):
+                    st.session_state.quiz_answered = True
+                    # Calcular puntuación
+                    for i, q in enumerate(QUIZ_QUESTIONS):
+                        if st.session_state.quiz_responses.get(i) == q['opciones'][q['respuesta_correcta']]:
+                            score += 1
+                    st.session_state.quiz_score = score
+                    st.rerun()
+        
+        else:
+            # Mostrar resultados
+            st.markdown(f"""
+            <div style="text-align: center; padding: 2rem;">
+                <h2 style="color: #333;">🎯 Resultados del Quiz</h2>
+                <h1 style="font-size: 4rem; color: #4CAF50;">
+                    {st.session_state.quiz_score}/{len(QUIZ_QUESTIONS)}
+                </h1>
+                <p style="font-size: 1.2rem; color: #666;">
+                    ¡{"Excelente trabajo!" if st.session_state.quiz_score >= 4 else "Buen intento!"}
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            # Mostrar respuestas correctas
+            st.markdown("### 📚 Revisión de Respuestas")
+            for i, q in enumerate(QUIZ_QUESTIONS):
+                user_ans = st.session_state.quiz_responses.get(i)
+                correct_ans = q['opciones'][q['respuesta_correcta']]
+                is_correct = user_ans == correct_ans
+                
+                st.markdown(f"""
+                <div style="background: {'#d4edda' if is_correct else '#f8d7da'}; 
+                            padding: 1rem; border-radius: 10px; margin: 1rem 0;">
+                    <h4>Pregunta {i+1}: {q['pregunta']}</h4>
+                    <p><strong>Tu respuesta:</strong> {user_ans} 
+                       {' ✅' if is_correct else ' ❌'}</p>
+                    {f'<p><strong>Respuesta correcta:</strong> {correct_ans}</p>' if not is_correct else ''}
+                    <p style="font-style: italic; color: #666; margin-top: 0.5rem;">
+                        {q['explicacion']}
+                    </p>
+                </div>
+                """, unsafe_allow_html=True)
+            
+            # Botón para reiniciar
+            col1, col2, col3 = st.columns([1, 2, 1])
+            with col2:
+                if st.button("🔄 Reiniciar Presentación", type="secondary", use_container_width=True):
+                    st.session_state.slide_number = 0
+                    st.session_state.quiz_answered = False
+                    st.session_state.show_quiz = False
+                    st.session_state.quiz_responses = {}
+                    st.session_state.quiz_score = 0
+                    st.rerun()
+        
+        st.markdown("</div>", unsafe_allow_html=True)
+    
+    # Footer
+    st.markdown("---")
+    st.markdown("""
+    <div style="text-align: center; color: #666; padding: 1rem;">
+        <p>Software Libre vs Software Privativo - 2da Ronda de Exposiciones</p>
+        <p style="font-size: 0.9rem;">Creado con Streamlit 🚀 | Código disponible en GitHub</p>
+    </div>
+    """, unsafe_allow_html=True)
 
-st.sidebar.metric("Software Libre", total_libre, "ejemplos")
-st.sidebar.metric("Software Privado", total_privado, "ejemplos")
-st.sidebar.metric("Categorías", total_categorias, "tipos")
-st.sidebar.metric("Preguntas Quiz", len(PREGUNTAS_QUIZ_PROFESIONAL), "disponibles")
-
-if st.session_state.quiz_total > 0:
-  accuracy = (st.session_state.quiz_score / st.session_state.quiz_total) * 100
-  st.sidebar.metric("Precisión Quiz", f"{accuracy:.1f}%", f"{st.session_state.quiz_score}/{st.session_state.quiz_total}")
-
-# Función para reiniciar quiz
-def reiniciar_quiz():
-  st.session_state.quiz_score = 0
-  st.session_state.quiz_total = 0
+# Ejecutar la aplicación
+if __name__ == "__main__":
+    main()
