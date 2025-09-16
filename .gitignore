@@ -1,1 +1,13 @@
+# Archivos temporales de Python
+__pycache__/
+*.pyc
 
+# Configuración de entorno
+.env
+
+# Archivos de editor
+.vscode/
+.idea/
+
+# Otros
+.DS_Store
